@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.sys.EduBaseDao">
+	<sql id="eduBaseColumns">
+		e.id,
+		e.name,
+		e.address,
+		e.supervisor,
+		e.input_time,
+		e.remarks,
+		e.deleted,
+		e.enabled,
+		e.creater_id,
+		e.create_time,
+		e.update_id,
+		e.update_time
+	</sql>
+	<sql id="eduBaseColumns2">
+		id,
+		name,
+		address,
+		supervisor,
+		input_time,
+		remarks,
+		deleted,
+		enabled,
+		creater_id,
+		create_time,
+		update_id,
+		update_time
+	</sql>
+	<resultMap type="EduBase" id="eduBaseMap" extends="baseBean">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="address" property="address"/>
+		<result column="supervisor" property="supervisor"/>
+		<result column="input_time" property="inputTime"/>
+		<result column="remarks" property="remarks"/>
+	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+    
+    <select id="getCount" resultType="java.lang.Long">
+    	select count(id) from sys_edu_base e where e.deleted=1
+    	<if test="name != null and name != ''">
+			and e.name like concat('%',#{name},'%')
+		</if>
+		<if test="name != null and name != ''">
+			and e.name like concat('%',#{name},'%')
+		</if>
+    </select>
+    
+    <select id="getEduBases" resultMap="eduBaseMap">
+    	select 
+			<include refid="eduBaseColumns" />
+		from sys_edu_base e where e.deleted=1
+		<if test="name != null and name != ''">
+			and e.name like concat('%',#{name},'%')
+		</if>
+		<if test="sort!=null and sort!=''">
+			order by #{sort}
+		</if>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+    </select>
+    
+    <select id="getEduBaseById" resultMap="eduBaseMap">
+		select 
+			<include refid="eduBaseColumns" />
+		 from sys_edu_base e where e.id=#{id}
+      		and e.deleted=1
+      		<if test="enabled != -1">
+      			and e.enabled=#{enabled}
+      		 </if>
+	</select>
+    
+    <insert id="addEduBase" parameterType="EduBase" >
+		insert into sys_edu_base (
+			<include refid="eduBaseColumns2" />
+		) values (
+			#{id},
+			#{name},
+			#{address},
+			#{supervisor},
+			#{inputTime},
+			#{remarks},
+			#{deleted},
+			#{enabled},
+			#{createrId},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateId},
+			#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<update id="updateEduBase" parameterType="EduBase">
+		update sys_edu_base set 
+			name=#{name},
+			address=#{address},
+			supervisor=#{supervisor},
+			input_time=#{inputTime},
+			remarks=#{remarks},
+			deleted=#{deleted},
+			enabled=#{enabled},
+			update_id=#{updateId},
+			update_time=#{updateTime,jdbcType=TIMESTAMP}
+		where id=#{id}
+	</update>
+	
+	<update id="deletedEduBaseById" parameterType="java.lang.String">
+		update sys_edu_base e set e.deleted=0 where e.id=#{id}
+	</update>
+</mapper>

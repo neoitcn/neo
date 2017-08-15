@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.supervision.IdeologyReportDao">
+	<sql id="ideologyReportColumns">
+		ir.id, ir.corr_company, ir.corr_person, ir.report_time,
+		ir.remarks, ir.creater_id,
+		ir.create_time,
+		ir.update_id, ir.update_time, ir.deleted,ir.office_id,ir.office_name
+	</sql>
+	<sql id="ideologyReportColumns2">
+		id, corr_company, corr_person,report_time,
+		remarks, creater_id,
+		create_time,
+		update_id, update_time, deleted,office_id,office_name
+	</sql>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId" />
+		<result column="create_time" property="createTime" />
+		<result column="update_id" property="updateId" />
+		<result column="update_time" property="updateTime" />
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	<resultMap id="ideologyReportMap" type="IdeologyReport" extends="baseBean">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="corr_company" jdbcType="VARCHAR" property="corrCompany" />
+		<result column="corr_person" jdbcType="VARCHAR" property="corrPerson" />
+		<result column="report_time" jdbcType="TIMESTAMP" property="reportTime" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<result column="file_name" jdbcType="VARCHAR" property="fileName" />
+		<result column="file_id" jdbcType="VARCHAR" property="fileId" />
+		<result column="office_id" jdbcType="INTEGER" property="officeId" />
+		<result column="office_name" jdbcType="VARCHAR" property="officeName" />
+	</resultMap>
+	<select id="getIdeologyReports" resultMap="ideologyReportMap">
+		select
+			<include refid="ideologyReportColumns"></include>,concat(f.file_name,'.',f.file_type) as file_name,f.id as file_id
+		from mn_ideology_report ir
+		left join sys_file f on f.object_id = ir.id
+		where ir.deleted=1
+		<if test="corrPerson != null and corrPerson != ''">
+		  <!-- and	ir.corr_person like #{'%',#{corrPerson},'%'} 不能正常返回查询结果-->
+			and	ir.corr_person like concat('%',#{corrPerson},'%')
+		</if>
+		<if test="admin == null or admin != 1">
+		<choose>
+			<when test="offices == null or offices.size() == 0">
+				and 1=2
+			</when>
+			<otherwise>
+				and ir.office_id in
+				<foreach collection="offices" open="(" close=")" item="office" separator=",">
+					#{office.id}
+				</foreach>
+			</otherwise>
+		</choose>
+  	</if>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	<select id="getCount" resultType="java.lang.Long">
+		select
+			count(id)
+		from mn_ideology_report ir
+		where ir.deleted=1
+		<if test="corrPerson != null and corrPerson != ''">
+			and ir.corr_person like concat('%',#{corrPerson},'%')
+		</if>
+		<if test="admin == null or admin != 1">
+		<choose>
+			<when test="offices == null or offices.size() == 0">
+				and 1=2
+			</when>
+			<otherwise>
+				and ir.office_id in
+				<foreach collection="offices" open="(" close=")" item="office" separator=",">
+					#{office.id}
+				</foreach>
+			</otherwise>
+		</choose>
+  	</if>
+	</select>
+	<select id="getIdeologyReportById" resultMap="ideologyReportMap">
+		select
+			<include refid="ideologyReportColumns"></include>,concat(f.file_name,'.',f.file_type) as file_name,f.id as file_id
+		from mn_ideology_report ir
+		left join sys_file f on f.object_id=ir.id
+		where ir.deleted=1 and ir.id=#{id}
+	</select>
+	<insert id="addIdeologyReport">
+		insert into mn_ideology_report
+		(
+			<include refid="ideologyReportColumns2"></include>
+		)
+		values
+		(#{id,jdbcType=VARCHAR}, #{corrCompany,jdbcType=VARCHAR},
+		#{corrPerson,jdbcType=VARCHAR},
+		#{reportTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR},
+		#{createrId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateId,jdbcType=VARCHAR},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{deleted,jdbcType=INTEGER},
+		 #{officeId,jdbcType=INTEGER}, #{officeName,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateIdeologyReport" >
+		update
+		mn_ideology_report
+		set corr_company = #{corrCompany,jdbcType=VARCHAR},
+		corr_person = #{corrPerson,jdbcType=VARCHAR},
+		report_time =
+		#{reportTime,jdbcType=TIMESTAMP},
+		remarks =
+		#{remarks,jdbcType=VARCHAR},
+		update_id =
+		#{updateId,jdbcType=VARCHAR},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		deleted = #{deleted,jdbcType=INTEGER},
+		  office_id=#{officeId,jdbcType=INTEGER},
+	      office_name=#{officeName,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="deleteIdeologyReport">
+		update mn_ideology_report set deleted=0 where id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.docm.MobileNoInfoDao">
+  <resultMap id="mobileNoInfoMap" type="MobileNoInfo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="ECID" jdbcType="VARCHAR" property="ecid" />
+    <result column="OrdID" jdbcType="VARCHAR" property="ordid" />
+    <result column="ProdName" jdbcType="VARCHAR" property="prodname" />
+    <result column="OprSeq" jdbcType="VARCHAR" property="oprseq" />
+    <result column="MSISDN" jdbcType="VARCHAR" property="msisdn" />
+    <result column="OprCode" jdbcType="VARCHAR" property="oprcode" />
+    <result column="PayECID" jdbcType="VARCHAR" property="payecid" />
+    <result column="EfftT" jdbcType="VARCHAR" property="efftt" />
+    <result column="OprT" jdbcType="VARCHAR" property="oprt" />
+    <result column="LocType" jdbcType="VARCHAR" property="loctype" />
+    <result column="UEType" jdbcType="VARCHAR" property="uetype" />
+    <result column="UEID" jdbcType="VARCHAR" property="ueid" />
+    <result column="UEModel" jdbcType="VARCHAR" property="uemodel" />
+    <result column="AutoNum" jdbcType="VARCHAR" property="autonum" />
+    <result column="tjtime" jdbcType="VARCHAR" property="tjtime" />
+  </resultMap>
+  <sql id="userinfoColumn">
+    id, ECID, OrdID, ProdName, OprSeq, MSISDN, OprCode, PayECID, EfftT, OprT, LocType,
+    UEType, UEID, UEModel, AutoNum, tjtime
+  </sql>
+ <!-- <insert id="insert" parameterType="com.aofa.sifa.entity.docm.MobileNoInfo">
+    insert into userinfo (id, ECID, OrdID, 
+      ProdName, OprSeq, MSISDN, 
+      OprCode, PayECID, EfftT, 
+      OprT, LocType, UEType, 
+      UEID, UEModel, AutoNum, 
+      tjtime)
+    values (#{id,jdbcType=INTEGER}, #{ecid,jdbcType=VARCHAR}, #{ordid,jdbcType=VARCHAR}, 
+      #{prodname,jdbcType=VARCHAR}, #{oprseq,jdbcType=VARCHAR}, #{msisdn,jdbcType=VARCHAR}, 
+      #{oprcode,jdbcType=VARCHAR}, #{payecid,jdbcType=VARCHAR}, #{efftt,jdbcType=VARCHAR}, 
+      #{oprt,jdbcType=VARCHAR}, #{loctype,jdbcType=VARCHAR}, #{uetype,jdbcType=VARCHAR}, 
+      #{ueid,jdbcType=VARCHAR}, #{uemodel,jdbcType=VARCHAR}, #{autonum,jdbcType=VARCHAR}, 
+      #{tjtime,jdbcType=VARCHAR})
+  </insert>-->
+  <!--<update id="updateByPrimaryKey" parameterType="com.aofa.sifa.entity.docm.MobileNoInfo">
+    update userinfo
+    set ECID = #{ecid,jdbcType=VARCHAR},
+      OrdID = #{ordid,jdbcType=VARCHAR},
+      ProdName = #{prodname,jdbcType=VARCHAR},
+      OprSeq = #{oprseq,jdbcType=VARCHAR},
+      MSISDN = #{msisdn,jdbcType=VARCHAR},
+      OprCode = #{oprcode,jdbcType=VARCHAR},
+      PayECID = #{payecid,jdbcType=VARCHAR},
+      EfftT = #{efftt,jdbcType=VARCHAR},
+      OprT = #{oprt,jdbcType=VARCHAR},
+      LocType = #{loctype,jdbcType=VARCHAR},
+      UEType = #{uetype,jdbcType=VARCHAR},
+      UEID = #{ueid,jdbcType=VARCHAR},
+      UEModel = #{uemodel,jdbcType=VARCHAR},
+      AutoNum = #{autonum,jdbcType=VARCHAR},
+      tjtime = #{tjtime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>-->
+</mapper>

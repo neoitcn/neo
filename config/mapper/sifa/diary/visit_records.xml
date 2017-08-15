@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.diary.VisitRecordsDao">
+	<sql id="visitRecordsColumn">
+		vr.id,vr.name,vr. visit_place, vr.visit_reason, vr.visit_person, vr.corr_company, vr.visit_time, vr.visit_content, 
+		vr.remarks, vr.phone, vr.creater_id, vr.create_time, vr.update_id, vr.update_time, vr.deleted
+	</sql>
+  <sql id="visitRecordsColumn2">
+    id, name, visit_place, visit_reason, visit_person, corr_company, visit_time, visit_content, 
+    remarks, phone, creater_id, create_time, update_id, update_time, deleted
+  </sql>
+  <resultMap id="visitRecords" type="VisitRecords" extends="baseBean">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="visit_place" jdbcType="VARCHAR" property="visitPlace" />
+    <result column="visit_reason" jdbcType="VARCHAR" property="visitReason" />
+    <result column="visit_person" jdbcType="VARCHAR" property="visitPerson" />
+    <result column="corr_company" jdbcType="VARCHAR" property="corrCompany" />
+    <result column="visit_time" jdbcType="TIMESTAMP" property="visitTime" />
+    <result column="visit_content" jdbcType="VARCHAR" property="visitContent" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+  </resultMap>
+  <resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+  <select id="getVistRecords" resultMap="visitRecords">
+   	select 
+   		<include refid="visitRecordsColumn"></include>
+   	from dm_visit_records vr
+   	where vr.deleted=1
+   	<if test="name != null and name != ''">
+   	 and vr.name like concat('%',#{name},'%')
+   	</if>
+   	<if test="visitTime != null">
+   		and vr.visit_time >= #{visitTime}
+   	</if>
+   	<if test="rows > 0">
+   		limit #{start},#{rows}
+   	</if>
+  </select>
+  <select id="getVistRecordsById" resultMap="visitRecords">
+   	select 
+   		<include refid="visitRecordsColumn"></include>
+   	from dm_visit_records vr where vr.deleted=1 and vr.id=#{id}
+  </select>
+  <select id="getCount" resultType="java.lang.Long">
+   	select 
+   		count(id)
+   	from dm_visit_records vr where vr.deleted=1
+   	<if test="name != null and name != ''">
+   	 and vr.name like concat('%',#{name},'%')
+   	</if>
+   	<if test="visitTime != null">
+   		and vr.visit_time >= #{visitTime}
+   	</if>
+  </select>
+ 
+  <insert id="addVisitRecords">
+    insert into dm_visit_records (
+    	<include refid="visitRecordsColumn2"></include>
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{visitPlace,jdbcType=VARCHAR}, 
+      #{visitReason,jdbcType=VARCHAR}, #{visitPerson,jdbcType=VARCHAR}, #{corrCompany,jdbcType=VARCHAR}, 
+      #{visitTime,jdbcType=TIMESTAMP}, #{visitContent,jdbcType=VARCHAR}, #{remarks,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{createrId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateVisitRecords">
+    update dm_visit_records
+    set name = #{name,jdbcType=VARCHAR},
+      visit_place = #{visitPlace,jdbcType=VARCHAR},
+      visit_reason = #{visitReason,jdbcType=VARCHAR},
+      visit_person = #{visitPerson,jdbcType=VARCHAR},
+      corr_company = #{corrCompany,jdbcType=VARCHAR},
+      visit_time = #{visitTime,jdbcType=TIMESTAMP},
+      visit_content = #{visitContent,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      update_id = #{updateId,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="deleteVisitRecords">
+  	update dm_visit_records set deleted=0 where id=#{id}
+  </update>
+</mapper>

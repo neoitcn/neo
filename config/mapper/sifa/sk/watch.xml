@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.sk.WatchDao">
+  <resultMap id="watchMap" type="Watch">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="imei" jdbcType="VARCHAR" property="imei" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+    <result column="time" jdbcType="TIMESTAMP" property="time" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="online" jdbcType="VARCHAR" property="online" />
+    <result column="isdelete" jdbcType="BIT" property="isdelete" />
+    <result column="phone_power" jdbcType="VARCHAR" property="phonePower" />
+    <result column="watch_power" jdbcType="VARCHAR" property="watchPower" />
+    <result column="up_state" jdbcType="VARCHAR" property="upState" />
+    <result column="up_interval" jdbcType="VARCHAR" property="upInterval" />
+    <result column="pid_warning" jdbcType="VARCHAR" property="pidWarning" />
+    <result column="rf_warning" jdbcType="VARCHAR" property="rfWarning" />
+    <result column="wddk_warning" jdbcType="VARCHAR" property="wddkWarning" />
+    <result column="rfdk_warning" jdbcType="VARCHAR" property="rfdkWarning" />
+    <result column="is_setup" jdbcType="VARCHAR" property="isSetup" />
+    <result column="is_jj" jdbcType="VARCHAR" property="isJj" />
+    <result column="lon" jdbcType="VARCHAR" property="lon" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+    <result column="zxh" jdbcType="VARCHAR" property="zxh" />
+    <result column="zxhm" jdbcType="VARCHAR" property="zxhm" />
+    <result column="lsh" jdbcType="VARCHAR" property="lsh" />
+    <result column="dwzt" jdbcType="VARCHAR" property="dwzt" />
+    <result column="lacid" jdbcType="VARCHAR" property="lacid" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
+    <result column="yj_type" jdbcType="VARCHAR" property="yjType" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="port" jdbcType="VARCHAR" property="port" />
+    <result column="speed" jdbcType="REAL" property="speed" />
+    <result column="direction" jdbcType="INTEGER" property="direction" />
+    <result column="altitude" jdbcType="INTEGER" property="altitude" />
+    <result column="satellite" jdbcType="INTEGER" property="satellite" />
+    <result column="gms_power" jdbcType="INTEGER" property="gmsPower" />
+    <result column="power" jdbcType="INTEGER" property="power" />
+    <result column="setp" jdbcType="INTEGER" property="setp" />
+    <result column="roll" jdbcType="INTEGER" property="roll" />
+    <result column="alarm_state" jdbcType="VARCHAR" property="alarmState" />
+    <result column="base_station" jdbcType="INTEGER" property="baseStation" />
+    <result column="delayed" jdbcType="INTEGER" property="delayed" />
+    <result column="mcc" jdbcType="INTEGER" property="mcc" />
+    <result column="mnc" jdbcType="INTEGER" property="mnc" />
+    <result column="ConnectStationCode" jdbcType="VARCHAR" property="connectstationcode" />
+    <result column="ConnectStationNo" jdbcType="VARCHAR" property="connectstationno" />
+    <result column="ConnectStationPower" jdbcType="VARCHAR" property="connectstationpower" />
+    <result column="ConnectStation_1_Code" jdbcType="VARCHAR" property="connectstation1Code" />
+    <result column="ConnectStation_1_No" jdbcType="VARCHAR" property="connectstation1No" />
+    <result column="ConnectStation_1_Power" jdbcType="VARCHAR" property="connectstation1Power" />
+    <result column="ConnectStation_2_Code" jdbcType="VARCHAR" property="connectstation2Code" />
+    <result column="ConnectStation_2_No" jdbcType="VARCHAR" property="connectstation2No" />
+    <result column="ConnectStation_2_Power" jdbcType="VARCHAR" property="connectstation2Power" />
+    <result column="ConnectStation_3_Code" jdbcType="VARCHAR" property="connectstation3Code" />
+    <result column="ConnectStation_3_No" jdbcType="VARCHAR" property="connectstation3No" />
+    <result column="ConnectStation_3_Power" jdbcType="VARCHAR" property="connectstation3Power" />
+  </resultMap>
+  <sql id="watchColumns">
+    p.id, p.imei, p.pid, p.time, p.phone, p.online, p.isdelete, p.phone_power, p.watch_power, p.up_state, 
+    p.up_interval, p.pid_warning, p.rf_warning, p.wddk_warning, p.rfdk_warning, p.is_setup, p.is_jj, 
+    p.lon, p.lat, p.zxh, p.zxhm, p.lsh, p.dwzt, p.lacid, p.cid, p.yj_type, p.ip, p.port, p.speed, p.direction, 
+    p.altitude, p.satellite, p.gms_power, p.power, p.setp, p.roll, p.alarm_state, p.base_station, p.delayed, 
+    p.mcc, p.mnc, p.ConnectStationCode, p.ConnectStationNo, p.ConnectStationPower, p.ConnectStation_1_Code, 
+    p.ConnectStation_1_No, p.ConnectStation_1_Power, p.ConnectStation_2_Code, p.ConnectStation_2_No, 
+    p.ConnectStation_2_Power, p.ConnectStation_3_Code, p.ConnectStation_3_No, p.ConnectStation_3_Power
+  </sql>
+  <sql id="watchColumns2">
+    id, imei, pid, time, phone, online, isdelete, phone_power, watch_power, up_state, 
+    up_interval, pid_warning, rf_warning, wddk_warning, rfdk_warning, is_setup, is_jj, 
+    lon, lat, zxh, zxhm, lsh, dwzt, lacid, cid, yj_type, ip, port, speed, direction, 
+    altitude, satellite, gms_power, power, setp, roll, alarm_state, base_station, delayed, 
+    mcc, mnc, ConnectStationCode, ConnectStationNo, ConnectStationPower, ConnectStation_1_Code, 
+    ConnectStation_1_No, ConnectStation_1_Power, ConnectStation_2_Code, ConnectStation_2_No, 
+    ConnectStation_2_Power, ConnectStation_3_Code, ConnectStation_3_No, ConnectStation_3_Power
+  </sql>
+  
+  <select id="getWatchByimei" resultMap="watchMap">
+	    select 
+	        <include refid="watchColumns"></include>
+	    from smu_pin_state p where p.imei=#{imei}
+	</select>
+  <select id="getWatchs" resultMap="watchMap">
+    select
+    <include refid="watchColumns"></include>
+    from smu_pin_state p where
+    <choose>
+      <when test="imeis == null or imeis.size() == 0">
+        1=2
+      </when>
+      <otherwise>
+        p.imei in
+        <foreach collection="imeis" open="(" close=")" separator="," item="imei">
+          #{imei}
+        </foreach>
+      </otherwise>
+    </choose>
+  </select>
+  <select id="getWatchWarn" resultMap="watchMap">
+    select
+    <include refid="watchColumns"></include>
+    from smu_pin_state p WHERE p.isdelete=0
+    <if test="imei!=null and imei!=''">
+      and p.imei=#{imei}
+    </if>
+    <if test="warnType!=null and warnType!=''">
+      <if test="1"><!--离线报警-->
+       and p.online=0
+      </if>
+      <if test="2"><!--低电报警-->
+        and CAST(p.watch_power AS SIGNED INTEGER) <![CDATA[<]]> 20
+      </if>
+      <if test="3"><!--腕带断开报警-->
+        and p.wddk_warning=3
+      </if>
+    </if>
+  </select>
+  <insert id="insert" >
+    insert into smu_pin_state (id, imei, pid, 
+      time, phone, online, 
+      isdelete, phone_power, watch_power, 
+      up_state, up_interval, pid_warning, 
+      rf_warning, wddk_warning, rfdk_warning, 
+      is_setup, is_jj, lon, 
+      lat, zxh, zxhm, lsh, 
+      dwzt, lacid, cid, yj_type, 
+      ip, port, speed, direction, 
+      altitude, satellite, gms_power, 
+      power, setp, roll, 
+      alarm_state, base_station, delayed, 
+      mcc, mnc, ConnectStationCode, 
+      ConnectStationNo, ConnectStationPower, 
+      ConnectStation_1_Code, ConnectStation_1_No, 
+      ConnectStation_1_Power, ConnectStation_2_Code, 
+      ConnectStation_2_No, ConnectStation_2_Power, 
+      ConnectStation_3_Code, ConnectStation_3_No, 
+      ConnectStation_3_Power)
+    values (#{id,jdbcType=VARCHAR}, #{imei,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, 
+      #{time,jdbcType=TIMESTAMP}, #{phone,jdbcType=VARCHAR}, #{online,jdbcType=VARCHAR}, 
+      #{isdelete,jdbcType=BIT}, #{phonePower,jdbcType=VARCHAR}, #{watchPower,jdbcType=VARCHAR}, 
+      #{upState,jdbcType=VARCHAR}, #{upInterval,jdbcType=VARCHAR}, #{pidWarning,jdbcType=VARCHAR}, 
+      #{rfWarning,jdbcType=VARCHAR}, #{wddkWarning,jdbcType=VARCHAR}, #{rfdkWarning,jdbcType=VARCHAR}, 
+      #{isSetup,jdbcType=VARCHAR}, #{isJj,jdbcType=VARCHAR}, #{lon,jdbcType=VARCHAR}, 
+      #{lat,jdbcType=VARCHAR}, #{zxh,jdbcType=VARCHAR}, #{zxhm,jdbcType=VARCHAR}, #{lsh,jdbcType=VARCHAR}, 
+      #{dwzt,jdbcType=VARCHAR}, #{lacid,jdbcType=VARCHAR}, #{cid,jdbcType=VARCHAR}, #{yjType,jdbcType=VARCHAR}, 
+      #{ip,jdbcType=VARCHAR}, #{port,jdbcType=VARCHAR}, #{speed,jdbcType=REAL}, #{direction,jdbcType=INTEGER}, 
+      #{altitude,jdbcType=INTEGER}, #{satellite,jdbcType=INTEGER}, #{gmsPower,jdbcType=INTEGER}, 
+      #{power,jdbcType=INTEGER}, #{setp,jdbcType=INTEGER}, #{roll,jdbcType=INTEGER}, 
+      #{alarmState,jdbcType=VARCHAR}, #{baseStation,jdbcType=INTEGER}, #{delayed,jdbcType=INTEGER}, 
+      #{mcc,jdbcType=INTEGER}, #{mnc,jdbcType=INTEGER}, #{connectstationcode,jdbcType=VARCHAR}, 
+      #{connectstationno,jdbcType=VARCHAR}, #{connectstationpower,jdbcType=VARCHAR}, 
+      #{connectstation1Code,jdbcType=VARCHAR}, #{connectstation1No,jdbcType=VARCHAR}, 
+      #{connectstation1Power,jdbcType=VARCHAR}, #{connectstation2Code,jdbcType=VARCHAR}, 
+      #{connectstation2No,jdbcType=VARCHAR}, #{connectstation2Power,jdbcType=VARCHAR}, 
+      #{connectstation3Code,jdbcType=VARCHAR}, #{connectstation3No,jdbcType=VARCHAR}, 
+      #{connectstation3Power,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective">
+    insert into smu_pin_state
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="imei != null">
+        imei,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="online != null">
+        online,
+      </if>
+      <if test="isdelete != null">
+        isdelete,
+      </if>
+      <if test="phonePower != null">
+        phone_power,
+      </if>
+      <if test="watchPower != null">
+        watch_power,
+      </if>
+      <if test="upState != null">
+        up_state,
+      </if>
+      <if test="upInterval != null">
+        up_interval,
+      </if>
+      <if test="pidWarning != null">
+        pid_warning,
+      </if>
+      <if test="rfWarning != null">
+        rf_warning,
+      </if>
+      <if test="wddkWarning != null">
+        wddk_warning,
+      </if>
+      <if test="rfdkWarning != null">
+        rfdk_warning,
+      </if>
+      <if test="isSetup != null">
+        is_setup,
+      </if>
+      <if test="isJj != null">
+        is_jj,
+      </if>
+      <if test="lon != null">
+        lon,
+      </if>
+      <if test="lat != null">
+        lat,
+      </if>
+      <if test="zxh != null">
+        zxh,
+      </if>
+      <if test="zxhm != null">
+        zxhm,
+      </if>
+      <if test="lsh != null">
+        lsh,
+      </if>
+      <if test="dwzt != null">
+        dwzt,
+      </if>
+      <if test="lacid != null">
+        lacid,
+      </if>
+      <if test="cid != null">
+        cid,
+      </if>
+      <if test="yjType != null">
+        yj_type,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="speed != null">
+        speed,
+      </if>
+      <if test="direction != null">
+        direction,
+      </if>
+      <if test="altitude != null">
+        altitude,
+      </if>
+      <if test="satellite != null">
+        satellite,
+      </if>
+      <if test="gmsPower != null">
+        gms_power,
+      </if>
+      <if test="power != null">
+        power,
+      </if>
+      <if test="setp != null">
+        setp,
+      </if>
+      <if test="roll != null">
+        roll,
+      </if>
+      <if test="alarmState != null">
+        alarm_state,
+      </if>
+      <if test="baseStation != null">
+        base_station,
+      </if>
+      <if test="delayed != null">
+        delayed,
+      </if>
+      <if test="mcc != null">
+        mcc,
+      </if>
+      <if test="mnc != null">
+        mnc,
+      </if>
+      <if test="connectstationcode != null">
+        ConnectStationCode,
+      </if>
+      <if test="connectstationno != null">
+        ConnectStationNo,
+      </if>
+      <if test="connectstationpower != null">
+        ConnectStationPower,
+      </if>
+      <if test="connectstation1Code != null">
+        ConnectStation_1_Code,
+      </if>
+      <if test="connectstation1No != null">
+        ConnectStation_1_No,
+      </if>
+      <if test="connectstation1Power != null">
+        ConnectStation_1_Power,
+      </if>
+      <if test="connectstation2Code != null">
+        ConnectStation_2_Code,
+      </if>
+      <if test="connectstation2No != null">
+        ConnectStation_2_No,
+      </if>
+      <if test="connectstation2Power != null">
+        ConnectStation_2_Power,
+      </if>
+      <if test="connectstation3Code != null">
+        ConnectStation_3_Code,
+      </if>
+      <if test="connectstation3No != null">
+        ConnectStation_3_No,
+      </if>
+      <if test="connectstation3Power != null">
+        ConnectStation_3_Power,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="imei != null">
+        #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="online != null">
+        #{online,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=BIT},
+      </if>
+      <if test="phonePower != null">
+        #{phonePower,jdbcType=VARCHAR},
+      </if>
+      <if test="watchPower != null">
+        #{watchPower,jdbcType=VARCHAR},
+      </if>
+      <if test="upState != null">
+        #{upState,jdbcType=VARCHAR},
+      </if>
+      <if test="upInterval != null">
+        #{upInterval,jdbcType=VARCHAR},
+      </if>
+      <if test="pidWarning != null">
+        #{pidWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="rfWarning != null">
+        #{rfWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="wddkWarning != null">
+        #{wddkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="rfdkWarning != null">
+        #{rfdkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="isSetup != null">
+        #{isSetup,jdbcType=VARCHAR},
+      </if>
+      <if test="isJj != null">
+        #{isJj,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null">
+        #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="zxh != null">
+        #{zxh,jdbcType=VARCHAR},
+      </if>
+      <if test="zxhm != null">
+        #{zxhm,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="dwzt != null">
+        #{dwzt,jdbcType=VARCHAR},
+      </if>
+      <if test="lacid != null">
+        #{lacid,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="yjType != null">
+        #{yjType,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        #{speed,jdbcType=REAL},
+      </if>
+      <if test="direction != null">
+        #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="altitude != null">
+        #{altitude,jdbcType=INTEGER},
+      </if>
+      <if test="satellite != null">
+        #{satellite,jdbcType=INTEGER},
+      </if>
+      <if test="gmsPower != null">
+        #{gmsPower,jdbcType=INTEGER},
+      </if>
+      <if test="power != null">
+        #{power,jdbcType=INTEGER},
+      </if>
+      <if test="setp != null">
+        #{setp,jdbcType=INTEGER},
+      </if>
+      <if test="roll != null">
+        #{roll,jdbcType=INTEGER},
+      </if>
+      <if test="alarmState != null">
+        #{alarmState,jdbcType=VARCHAR},
+      </if>
+      <if test="baseStation != null">
+        #{baseStation,jdbcType=INTEGER},
+      </if>
+      <if test="delayed != null">
+        #{delayed,jdbcType=INTEGER},
+      </if>
+      <if test="mcc != null">
+        #{mcc,jdbcType=INTEGER},
+      </if>
+      <if test="mnc != null">
+        #{mnc,jdbcType=INTEGER},
+      </if>
+      <if test="connectstationcode != null">
+        #{connectstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstationno != null">
+        #{connectstationno,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstationpower != null">
+        #{connectstationpower,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1Code != null">
+        #{connectstation1Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1No != null">
+        #{connectstation1No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1Power != null">
+        #{connectstation1Power,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2Code != null">
+        #{connectstation2Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2No != null">
+        #{connectstation2No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2Power != null">
+        #{connectstation2Power,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3Code != null">
+        #{connectstation3Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3No != null">
+        #{connectstation3No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3Power != null">
+        #{connectstation3Power,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByExampleSelective" >
+    update smu_pin_state
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imei != null">
+        imei = #{record.imei,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.time != null">
+        time = #{record.time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.online != null">
+        online = #{record.online,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isdelete != null">
+        isdelete = #{record.isdelete,jdbcType=BIT},
+      </if>
+      <if test="record.phonePower != null">
+        phone_power = #{record.phonePower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.watchPower != null">
+        watch_power = #{record.watchPower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upState != null">
+        up_state = #{record.upState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.upInterval != null">
+        up_interval = #{record.upInterval,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pidWarning != null">
+        pid_warning = #{record.pidWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rfWarning != null">
+        rf_warning = #{record.rfWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wddkWarning != null">
+        wddk_warning = #{record.wddkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rfdkWarning != null">
+        rfdk_warning = #{record.rfdkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isSetup != null">
+        is_setup = #{record.isSetup,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isJj != null">
+        is_jj = #{record.isJj,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lon != null">
+        lon = #{record.lon,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lat != null">
+        lat = #{record.lat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zxh != null">
+        zxh = #{record.zxh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zxhm != null">
+        zxhm = #{record.zxhm,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lsh != null">
+        lsh = #{record.lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dwzt != null">
+        dwzt = #{record.dwzt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lacid != null">
+        lacid = #{record.lacid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cid != null">
+        cid = #{record.cid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.yjType != null">
+        yj_type = #{record.yjType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.port != null">
+        port = #{record.port,jdbcType=VARCHAR},
+      </if>
+      <if test="record.speed != null">
+        speed = #{record.speed,jdbcType=REAL},
+      </if>
+      <if test="record.direction != null">
+        direction = #{record.direction,jdbcType=INTEGER},
+      </if>
+      <if test="record.altitude != null">
+        altitude = #{record.altitude,jdbcType=INTEGER},
+      </if>
+      <if test="record.satellite != null">
+        satellite = #{record.satellite,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmsPower != null">
+        gms_power = #{record.gmsPower,jdbcType=INTEGER},
+      </if>
+      <if test="record.power != null">
+        power = #{record.power,jdbcType=INTEGER},
+      </if>
+      <if test="record.setp != null">
+        setp = #{record.setp,jdbcType=INTEGER},
+      </if>
+      <if test="record.roll != null">
+        roll = #{record.roll,jdbcType=INTEGER},
+      </if>
+      <if test="record.alarmState != null">
+        alarm_state = #{record.alarmState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.baseStation != null">
+        base_station = #{record.baseStation,jdbcType=INTEGER},
+      </if>
+      <if test="record.delayed != null">
+        delayed = #{record.delayed,jdbcType=INTEGER},
+      </if>
+      <if test="record.mcc != null">
+        mcc = #{record.mcc,jdbcType=INTEGER},
+      </if>
+      <if test="record.mnc != null">
+        mnc = #{record.mnc,jdbcType=INTEGER},
+      </if>
+      <if test="record.connectstationcode != null">
+        ConnectStationCode = #{record.connectstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstationno != null">
+        ConnectStationNo = #{record.connectstationno,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstationpower != null">
+        ConnectStationPower = #{record.connectstationpower,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation1Code != null">
+        ConnectStation_1_Code = #{record.connectstation1Code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation1No != null">
+        ConnectStation_1_No = #{record.connectstation1No,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation1Power != null">
+        ConnectStation_1_Power = #{record.connectstation1Power,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation2Code != null">
+        ConnectStation_2_Code = #{record.connectstation2Code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation2No != null">
+        ConnectStation_2_No = #{record.connectstation2No,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation2Power != null">
+        ConnectStation_2_Power = #{record.connectstation2Power,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation3Code != null">
+        ConnectStation_3_Code = #{record.connectstation3Code,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation3No != null">
+        ConnectStation_3_No = #{record.connectstation3No,jdbcType=VARCHAR},
+      </if>
+      <if test="record.connectstation3Power != null">
+        ConnectStation_3_Power = #{record.connectstation3Power,jdbcType=VARCHAR},
+      </if>
+    </set>
+  </update>
+  <update id="updateByExample">
+    update smu_pin_state
+    set id = #{record.id,jdbcType=VARCHAR},
+      imei = #{record.imei,jdbcType=VARCHAR},
+      pid = #{record.pid,jdbcType=VARCHAR},
+      time = #{record.time,jdbcType=TIMESTAMP},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      online = #{record.online,jdbcType=VARCHAR},
+      isdelete = #{record.isdelete,jdbcType=BIT},
+      phone_power = #{record.phonePower,jdbcType=VARCHAR},
+      watch_power = #{record.watchPower,jdbcType=VARCHAR},
+      up_state = #{record.upState,jdbcType=VARCHAR},
+      up_interval = #{record.upInterval,jdbcType=VARCHAR},
+      pid_warning = #{record.pidWarning,jdbcType=VARCHAR},
+      rf_warning = #{record.rfWarning,jdbcType=VARCHAR},
+      wddk_warning = #{record.wddkWarning,jdbcType=VARCHAR},
+      rfdk_warning = #{record.rfdkWarning,jdbcType=VARCHAR},
+      is_setup = #{record.isSetup,jdbcType=VARCHAR},
+      is_jj = #{record.isJj,jdbcType=VARCHAR},
+      lon = #{record.lon,jdbcType=VARCHAR},
+      lat = #{record.lat,jdbcType=VARCHAR},
+      zxh = #{record.zxh,jdbcType=VARCHAR},
+      zxhm = #{record.zxhm,jdbcType=VARCHAR},
+      lsh = #{record.lsh,jdbcType=VARCHAR},
+      dwzt = #{record.dwzt,jdbcType=VARCHAR},
+      lacid = #{record.lacid,jdbcType=VARCHAR},
+      cid = #{record.cid,jdbcType=VARCHAR},
+      yj_type = #{record.yjType,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      port = #{record.port,jdbcType=VARCHAR},
+      speed = #{record.speed,jdbcType=REAL},
+      direction = #{record.direction,jdbcType=INTEGER},
+      altitude = #{record.altitude,jdbcType=INTEGER},
+      satellite = #{record.satellite,jdbcType=INTEGER},
+      gms_power = #{record.gmsPower,jdbcType=INTEGER},
+      power = #{record.power,jdbcType=INTEGER},
+      setp = #{record.setp,jdbcType=INTEGER},
+      roll = #{record.roll,jdbcType=INTEGER},
+      alarm_state = #{record.alarmState,jdbcType=VARCHAR},
+      base_station = #{record.baseStation,jdbcType=INTEGER},
+      delayed = #{record.delayed,jdbcType=INTEGER},
+      mcc = #{record.mcc,jdbcType=INTEGER},
+      mnc = #{record.mnc,jdbcType=INTEGER},
+      ConnectStationCode = #{record.connectstationcode,jdbcType=VARCHAR},
+      ConnectStationNo = #{record.connectstationno,jdbcType=VARCHAR},
+      ConnectStationPower = #{record.connectstationpower,jdbcType=VARCHAR},
+      ConnectStation_1_Code = #{record.connectstation1Code,jdbcType=VARCHAR},
+      ConnectStation_1_No = #{record.connectstation1No,jdbcType=VARCHAR},
+      ConnectStation_1_Power = #{record.connectstation1Power,jdbcType=VARCHAR},
+      ConnectStation_2_Code = #{record.connectstation2Code,jdbcType=VARCHAR},
+      ConnectStation_2_No = #{record.connectstation2No,jdbcType=VARCHAR},
+      ConnectStation_2_Power = #{record.connectstation2Power,jdbcType=VARCHAR},
+      ConnectStation_3_Code = #{record.connectstation3Code,jdbcType=VARCHAR},
+      ConnectStation_3_No = #{record.connectstation3No,jdbcType=VARCHAR},
+      ConnectStation_3_Power = #{record.connectstation3Power,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeySelective" >
+    update smu_pin_state
+    <set>
+      <if test="imei != null">
+        imei = #{imei,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="online != null">
+        online = #{online,jdbcType=VARCHAR},
+      </if>
+      <if test="isdelete != null">
+        isdelete = #{isdelete,jdbcType=BIT},
+      </if>
+      <if test="phonePower != null">
+        phone_power = #{phonePower,jdbcType=VARCHAR},
+      </if>
+      <if test="watchPower != null">
+        watch_power = #{watchPower,jdbcType=VARCHAR},
+      </if>
+      <if test="upState != null">
+        up_state = #{upState,jdbcType=VARCHAR},
+      </if>
+      <if test="upInterval != null">
+        up_interval = #{upInterval,jdbcType=VARCHAR},
+      </if>
+      <if test="pidWarning != null">
+        pid_warning = #{pidWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="rfWarning != null">
+        rf_warning = #{rfWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="wddkWarning != null">
+        wddk_warning = #{wddkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="rfdkWarning != null">
+        rfdk_warning = #{rfdkWarning,jdbcType=VARCHAR},
+      </if>
+      <if test="isSetup != null">
+        is_setup = #{isSetup,jdbcType=VARCHAR},
+      </if>
+      <if test="isJj != null">
+        is_jj = #{isJj,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null">
+        lon = #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+      <if test="zxh != null">
+        zxh = #{zxh,jdbcType=VARCHAR},
+      </if>
+      <if test="zxhm != null">
+        zxhm = #{zxhm,jdbcType=VARCHAR},
+      </if>
+      <if test="lsh != null">
+        lsh = #{lsh,jdbcType=VARCHAR},
+      </if>
+      <if test="dwzt != null">
+        dwzt = #{dwzt,jdbcType=VARCHAR},
+      </if>
+      <if test="lacid != null">
+        lacid = #{lacid,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+      <if test="yjType != null">
+        yj_type = #{yjType,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        speed = #{speed,jdbcType=REAL},
+      </if>
+      <if test="direction != null">
+        direction = #{direction,jdbcType=INTEGER},
+      </if>
+      <if test="altitude != null">
+        altitude = #{altitude,jdbcType=INTEGER},
+      </if>
+      <if test="satellite != null">
+        satellite = #{satellite,jdbcType=INTEGER},
+      </if>
+      <if test="gmsPower != null">
+        gms_power = #{gmsPower,jdbcType=INTEGER},
+      </if>
+      <if test="power != null">
+        power = #{power,jdbcType=INTEGER},
+      </if>
+      <if test="setp != null">
+        setp = #{setp,jdbcType=INTEGER},
+      </if>
+      <if test="roll != null">
+        roll = #{roll,jdbcType=INTEGER},
+      </if>
+      <if test="alarmState != null">
+        alarm_state = #{alarmState,jdbcType=VARCHAR},
+      </if>
+      <if test="baseStation != null">
+        base_station = #{baseStation,jdbcType=INTEGER},
+      </if>
+      <if test="delayed != null">
+        delayed = #{delayed,jdbcType=INTEGER},
+      </if>
+      <if test="mcc != null">
+        mcc = #{mcc,jdbcType=INTEGER},
+      </if>
+      <if test="mnc != null">
+        mnc = #{mnc,jdbcType=INTEGER},
+      </if>
+      <if test="connectstationcode != null">
+        ConnectStationCode = #{connectstationcode,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstationno != null">
+        ConnectStationNo = #{connectstationno,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstationpower != null">
+        ConnectStationPower = #{connectstationpower,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1Code != null">
+        ConnectStation_1_Code = #{connectstation1Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1No != null">
+        ConnectStation_1_No = #{connectstation1No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation1Power != null">
+        ConnectStation_1_Power = #{connectstation1Power,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2Code != null">
+        ConnectStation_2_Code = #{connectstation2Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2No != null">
+        ConnectStation_2_No = #{connectstation2No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation2Power != null">
+        ConnectStation_2_Power = #{connectstation2Power,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3Code != null">
+        ConnectStation_3_Code = #{connectstation3Code,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3No != null">
+        ConnectStation_3_No = #{connectstation3No,jdbcType=VARCHAR},
+      </if>
+      <if test="connectstation3Power != null">
+        ConnectStation_3_Power = #{connectstation3Power,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey">
+    update smu_pin_state
+    set imei = #{imei,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=VARCHAR},
+      time = #{time,jdbcType=TIMESTAMP},
+      phone = #{phone,jdbcType=VARCHAR},
+      online = #{online,jdbcType=VARCHAR},
+      isdelete = #{isdelete,jdbcType=BIT},
+      phone_power = #{phonePower,jdbcType=VARCHAR},
+      watch_power = #{watchPower,jdbcType=VARCHAR},
+      up_state = #{upState,jdbcType=VARCHAR},
+      up_interval = #{upInterval,jdbcType=VARCHAR},
+      pid_warning = #{pidWarning,jdbcType=VARCHAR},
+      rf_warning = #{rfWarning,jdbcType=VARCHAR},
+      wddk_warning = #{wddkWarning,jdbcType=VARCHAR},
+      rfdk_warning = #{rfdkWarning,jdbcType=VARCHAR},
+      is_setup = #{isSetup,jdbcType=VARCHAR},
+      is_jj = #{isJj,jdbcType=VARCHAR},
+      lon = #{lon,jdbcType=VARCHAR},
+      lat = #{lat,jdbcType=VARCHAR},
+      zxh = #{zxh,jdbcType=VARCHAR},
+      zxhm = #{zxhm,jdbcType=VARCHAR},
+      lsh = #{lsh,jdbcType=VARCHAR},
+      dwzt = #{dwzt,jdbcType=VARCHAR},
+      lacid = #{lacid,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=VARCHAR},
+      yj_type = #{yjType,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      port = #{port,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=REAL},
+      direction = #{direction,jdbcType=INTEGER},
+      altitude = #{altitude,jdbcType=INTEGER},
+      satellite = #{satellite,jdbcType=INTEGER},
+      gms_power = #{gmsPower,jdbcType=INTEGER},
+      power = #{power,jdbcType=INTEGER},
+      setp = #{setp,jdbcType=INTEGER},
+      roll = #{roll,jdbcType=INTEGER},
+      alarm_state = #{alarmState,jdbcType=VARCHAR},
+      base_station = #{baseStation,jdbcType=INTEGER},
+      delayed = #{delayed,jdbcType=INTEGER},
+      mcc = #{mcc,jdbcType=INTEGER},
+      mnc = #{mnc,jdbcType=INTEGER},
+      ConnectStationCode = #{connectstationcode,jdbcType=VARCHAR},
+      ConnectStationNo = #{connectstationno,jdbcType=VARCHAR},
+      ConnectStationPower = #{connectstationpower,jdbcType=VARCHAR},
+      ConnectStation_1_Code = #{connectstation1Code,jdbcType=VARCHAR},
+      ConnectStation_1_No = #{connectstation1No,jdbcType=VARCHAR},
+      ConnectStation_1_Power = #{connectstation1Power,jdbcType=VARCHAR},
+      ConnectStation_2_Code = #{connectstation2Code,jdbcType=VARCHAR},
+      ConnectStation_2_No = #{connectstation2No,jdbcType=VARCHAR},
+      ConnectStation_2_Power = #{connectstation2Power,jdbcType=VARCHAR},
+      ConnectStation_3_Code = #{connectstation3Code,jdbcType=VARCHAR},
+      ConnectStation_3_No = #{connectstation3No,jdbcType=VARCHAR},
+      ConnectStation_3_Power = #{connectstation3Power,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.docm.DrugsterDao">
+	
+	<sql id="drugsterColumns">
+		d.id,		
+		d.name,
+		d.nickname,
+		d.sex,
+		d.minorities,
+		d.height,
+		d.id_card,
+		d.identifyType,
+		d.phone,
+		d.birthday,
+		d.office_id,		
+		d.persontype,
+		d.personState,
+		d.servicePlace,
+		d.hometownPolice,
+		d.hometownDetails,
+		d.domicilePolice,
+		d.domicileDetalis,
+		d.photo_id,
+		d.drugtype,
+		d.discoverTime,
+		d.discoverPlace,
+		d.discoverUnit,
+		d.manageSituation,
+		d.manageTime,
+		d.managePlace,
+		d.breakLawFact,		
+		d.abandonDrugType,
+		d.abandonDrugStarttime,
+		d.abandonDruglength,
+		d.abandonDrugEndtime,
+		d.goOutReason,
+		d.isAids,
+		d.rehabilitationAgency,
+		d.rehabilitationlength,
+		d.rehabilitationStarttime,
+		d.goOutTime,
+		d.drugsterSource,
+		d.treatStarttime,		
+		d.treatPlace,
+		d.outOfContraltime,
+		d.treatUnit,
+		d.jzInstitution,
+		d.casetype,
+		d.jzStarttime,
+		d.jzEndtime,
+		d.jzlength,
+		d.sinfact,
+		d.lgUnit,
+		d.lgUnitDetails,
+		d.lgPoliceman,		
+		d.lgDatetime,
+		d.ruleTown,
+		d.ruleCommunity,
+		d.helpname,
+		d.helptype,
+		d.helpmanPosition,
+		d.helpmanUnit,
+		d.helpmanPhone,
+		d.urineTestTime,
+		d.urineTest,
+		d.imei,
+		d.pid,		
+		d.remarks,
+		d.creater_id,
+		d.create_time,
+		d.update_id,
+		d.update_time,
+		d.deleted,	
+		d.monitor_area_id,
+		d.online,
+		d.monitorStarttime,
+		d.monitorEndtime,
+		d.remandStarttime,
+		d.remandEndtime,
+		d.lawOffice,
+		d.lawName,
+		d.lawPhone
+	</sql>
+	<sql id="drugsterColumns2">
+		id,		
+		name,
+		nickname,
+		sex,
+		minorities,
+		height,
+		id_card,
+		identifyType,
+		phone,
+		birthday,
+		office_id,
+		persontype,
+		personState,
+		servicePlace,
+		hometownPolice,
+		hometownDetails,
+		domicilePolice,
+		domicileDetalis,
+		photo_id,
+		drugtype,
+		discoverTime,
+		discoverPlace,
+		discoverUnit,
+		manageSituation,
+		manageTime,
+		managePlace,
+		breakLawFact,		
+		abandonDrugType,
+		abandonDrugStarttime,
+		abandonDruglength,
+		abandonDrugEndtime,
+		goOutReason,
+		isAids,
+		rehabilitationAgency,
+		rehabilitationlength,
+		rehabilitationStarttime,
+		goOutTime,
+		drugsterSource,
+		treatStarttime,		
+		treatPlace,
+		outOfContraltime,
+		treatUnit,
+		jzInstitution,
+		casetype,
+		jzStarttime,
+		jzEndtime,
+		jzlength,
+		sinfact,
+		lgUnit,
+		lgUnitDetails,
+		lgPoliceman,		
+		lgDatetime,
+		ruleTown,
+		ruleCommunity,
+		helpname,
+		helptype,
+		helpmanPosition,
+		helpmanUnit,
+		helpmanPhone,
+		urineTestTime,
+		urineTest,
+		imei,
+		pid,		
+		remarks,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted,	
+		monitor_area_id,
+		online,
+		monitorStarttime,
+		monitorEndtime,
+		remandStarttime,
+		remandEndtime,
+		lawOffice,
+		lawName,
+		lawPhone
+	</sql>
+	<sql id="fileColumns">
+		file.id as f_id,
+		file.file_name,
+		file.file_type,
+		file.length,
+		file.file_path,
+		file.object_id
+	</sql>
+	<resultMap type="Drugster" id="drugster" extends="baseBean">
+		<id column="id" property="id"/>		
+		<result column="name" property="name"/>
+		<result column="nickname" property="nickname"/>
+		<result column="sex" property="sex"/>
+		<result column="minorities" property="minorities"/>
+		<result column="height" property="height"/>
+		<result column="id_card" property="idCard"/>
+		<result column="identifyType" property="identifyType"/>
+		<result column="phone" property="phone"/>		
+		<result column="birthday" property="birthday"/>
+		<result column="office_id" property="officeId"/>
+		<result column="persontype" property="persontype"/>
+		<result column="personState" property="personState"/>
+		<result column="servicePlace" property="servicePlace"/>
+		<result column="hometownPolice" property="hometownPolice"/>
+		<result column="hometownDetails" property="hometownDetails"/>
+		<result column="domicilePolice" property="domicilePolice"/>
+		<result column="domicileDetalis" property="domicileDetalis"/>
+		<result column="photo_id" property="photoId"/>
+		<result column="drugtype" property="drugtype"/>
+		<result column="discoverTime" property="discoverTime"/>
+		<result column="discoverPlace" property="discoverPlace"/>
+		<result column="discoverUnit" property="discoverUnit"/>
+		<result column="manageSituation" property="manageSituation"/>
+		<result column="manageTime" property="manageTime"/>
+		<result column="managePlace" property="managePlace"/>
+		<result column="breakLawFact" property="breakLawFact"/>		
+		<result column="abandonDrugType" property="abandonDrugType"/>
+		<result column="abandonDrugStarttime" property="abandonDrugStarttime"/>
+		<result column="abandonDruglength" property="abandonDruglength"/>
+		<result column="abandonDrugEndtime" property="abandonDrugEndtime"/>
+		<result column="goOutReason" property="goOutReason"/>
+		<result column="isAids" property="isAids"/>
+		<result column="rehabilitationAgency" property="rehabilitationAgency"/>
+		<result column="rehabilitationlength" property="rehabilitationlength"/>
+		<result column="rehabilitationStarttime" property="rehabilitationStarttime"/>
+		<result column="goOutTime" property="goOutTime"/>
+		<result column="drugsterSource" property="drugsterSource"/>
+		<result column="treatStarttime" property="treatStarttime"/>		
+		<result column="treatPlace" property="treatPlace"/>
+		<result column="outOfContraltime" property="outOfContraltime"/>
+		<result column="treatUnit" property="treatUnit"/>
+		<result column="jzInstitution" property="jzInstitution"/>
+		<result column="casetype" property="casetype"/>
+		<result column="jzStarttime" property="jzStarttime"/>
+		<result column="jzEndtime" property="jzEndtime"/>
+		<result column="jzlength" property="jzlength"/>
+		<result column="sinfact" property="sinfact"/>
+		<result column="lgUnit" property="lgUnit"/>
+		<result column="lgUnitDetails" property="lgUnitDetails"/>
+		<result column="lgPoliceman" property="lgPoliceman"/>		
+		<result column="lgDatetime" property="lgDatetime"/>
+		<result column="ruleTown" property="ruleTown"/>
+		<result column="ruleCommunity" property="ruleCommunity"/>
+		<result column="helpname" property="helpname"/>
+		<result column="helptype" property="helptype"/>
+		<result column="helpmanPosition" property="helpmanPosition"/>
+		<result column="helpmanUnit" property="helpmanUnit"/>
+		<result column="helpmanPhone" property="helpmanPhone"/>
+		<result column="urineTestTime" property="urineTestTime"/>
+		<result column="urineTest" property="urineTest"/>
+		<result column="imei" property="imei"/>
+		<result column="pid" property="pid"/>		
+		<result column="remarks" property="remarks"/>		
+		<result column="monitor_area_id" property="monitorAreaId"/>
+		<result column="online" property="online"/>
+		<result column="monitorStarttime" property="monitorStarttime"/>
+		<result column="monitorEndtime" property="monitorEndtime"/>
+		<result column="remandStarttime" property="remandStarttime"/>
+		<result column="remandEndtime" property="remandEndtime"/>
+		<result column="lawOffice" property="lawOffice"/>
+		<result column="lawName" property="lawName"/>
+		<result column="lawPhone" property="lawPhone"/>
+		<result column="office_name" property="officeName"/>
+		<result column="MSISDN" property="dbMobileNo"/>
+		<!--电子手铐在线状态-->
+		<result column="skOnline" property="skOnline"/>
+		<!--订购数量-->
+		<result column="dgCount" property="dgCount"/>
+ 	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />		
+	</resultMap>
+	<resultMap type="SysFile" id="SysFile" extends="baseBean">
+		<id column="f_id" property="id"/>
+		<result column="file_name" property="fileName"/>
+		<result column="file_type" property="fileType"/>
+		<result column="length" property="fileLength"/>
+		<result column="file_path" property="filePath"/>
+		<result column="object_id" property="objectId"/>
+	</resultMap>
+	<select id="getResultsByParam" resultMap="drugster">
+		select 
+			<include refid="drugsterColumns"></include>
+			,f.name as office_name,f.code as officeCode
+		<if test="needGemo == 'true'">
+			,h.address,h.posttime as postTime
+		</if>
+		from fm_drugster d
+		<if test="needGemo == 'true'">
+			left join (select id,max(posttime),id_card from mo_history_info group by id_card) m on m.id_card = d.id_card
+			left join mo_history_info h on h.id = m.id
+		</if>
+		left join sys_office f on  d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+		where d.deleted=1
+		<if test="name!=null and name!=''">
+			 and ( d.name like concat('%',#{name},'%') or phone like concat('%',#{name},'%') ) 
+		</if>
+		<if test="officeName!=null and officeName!=''">
+			and f.name like concat('%',#{officeName},'%')
+		</if>
+		<if test="idCard!=null and idCard!=''">
+			and d.id_card like concat('%',#{idCard},'%')
+		</if>
+		<if test="sex!=null and sex!=-1">
+			and d.sex=#{sex}
+		</if>
+
+		<if test="admin==2">
+			and d.office_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		<choose>
+			<when test="admin == null or admin != '1'">
+				<if test="offices!=null and offices.size()>0 ">
+					and d.office_id in
+					<foreach collection="offices"  open="(" close=")"  separator="," item="office">
+						#{office.id}
+					</foreach>
+				</if>
+			</when>
+			<otherwise>
+				and 1=2
+			</otherwise>
+		</choose>
+		order by d.create_time
+	</select>
+	<select id="getSkResultsByParam" resultMap="drugster">
+		select
+			<include refid="drugsterColumns"></include>
+			,f.name as office_name,f.code as officeCode,g.online as skOnline
+		<if test="needGemo == 'true'">
+			,h.address,h.posttime as postTime
+		</if>
+		from fm_drugster d
+		<if test="needGemo == 'true'">
+			left join (select id,max(posttime),id_card from mo_history_info group by id_card) m on m.id_card = d.id_card
+			left join mo_history_info h on h.id = m.id
+		</if>
+		inner join smu_pin_state g on d.imei=g.imei
+		left join sys_office f on  d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+		where d.deleted=1 and d.imei is not null and d.imei != ''
+		<if test="name!=null and name!=''">
+			 and ( d.name like concat('%',#{name},'%') or phone like concat('%',#{name},'%') )
+		</if>
+		<if test="officeName!=null and officeName!=''">
+			and f.name like concat('%',#{officeName},'%')
+		</if>
+		<if test="idCard!=null and idCard!=''">
+			and d.id_card like concat('%',#{idCard},'%')
+		</if>
+		<if test="sex!=null and sex!=-1">
+			and d.sex=#{sex}
+		</if>
+
+		<if test="admin==2">
+			and d.office_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+		<choose>
+			<when test="admin == null or admin != '1'">
+				<if test="offices!=null and offices.size()>0 ">
+					and d.office_id in
+					<foreach collection="offices"  open="(" close=")"  separator="," item="office">
+						#{office.id}
+					</foreach>
+				</if>
+			</when>
+			<otherwise>
+				and 1=2
+			</otherwise>
+		</choose>
+		order by d.create_time
+	</select>
+
+	<select id="getPageNum" resultType="java.lang.Long">	
+	select count(1) from fm_drugster where fm_drugster.create_time&lt;=(
+	select d.create_time from fm_drugster  d left join sys_office f on  d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+	where d.deleted=1 
+	<if test="locatePrisonerId!=null and locatePrisonerId!=''">
+		and	 d.id=#{locatePrisonerId}
+	</if>
+	)
+	order by fm_drugster.create_time		
+	</select>
+	
+	<select id="getCount" resultType="java.lang.Long">
+		select 
+			count(d.id)
+		from fm_drugster d
+		left join sys_office f on d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+		where d.deleted=1 
+		<if test="name!=null and name!=''">
+			 and ( f.name like concat('%',#{name},'%') or d.phone like concat('%',#{name},'%') ) 
+		</if>
+		<if test="officeName!=null and officeName!=''">
+			and d.name like concat('%',#{officeName},'%')
+		</if>
+		<if test="sex!=null and sex!=-1">
+			and d.sex=#{sex}
+		</if>
+	
+	 	<if test="admin == 0">
+			and d.office_id in
+			<foreach collection="ids" open="(" close=")" separator="," item="id">
+				#{id}
+			</foreach>
+		</if>
+	</select>
+	<select id="getResultById" resultMap="drugster">
+		select 
+			<include refid="drugsterColumns"></include>
+		from fm_drugster d where d.deleted=1 and d.id=#{id}
+	</select>
+	<select id="getDrugsterByNo" resultMap="drugster">
+		select 
+			<include refid="drugsterColumns"></include>
+		from fm_drugster d where d.deleted=1 
+	</select>
+	<select id="getDrugsterByIdCard" resultMap="drugster">
+		select 
+			<include refid="drugsterColumns"></include>,f.name as office_name,f.code as officeCode
+		from fm_drugster d
+		left join sys_office f on  d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+		where d.deleted=1 and d.id_card=#{idCard}
+	</select>
+	<select id="getDrugsterByIdCards" resultMap="drugster">
+		select
+			<include refid="drugsterColumns"></include>,f.name as office_name,f.code as officeCode
+		from fm_drugster d
+		left join sys_office f on  d.office_id=f.id and f.enabled = 1 and f.deleted = 1
+		where d.deleted=1
+        <choose>
+            <when test="idCards == null or idCards.size() == 0">
+                and 1=2
+            </when>
+            <otherwise>
+                and id_card IN
+                <foreach collection="idCards" open="(" close=")" item="idCard" separator="," >
+                    #{idCard}
+                </foreach>
+            </otherwise>
+        </choose>
+	</select>
+
+	<select id="getDrugsterByOffice" resultMap="drugster">
+		select 
+			<include refid="drugsterColumns"></include>,f.file_path as file_path
+		from fm_drugster d left join sys_file f ON d.photo_id=f.id  where d.deleted=1
+		<if test="offices != null and offices.size() > 0">
+			and d.office_id in
+			<foreach collection="offices" open="(" close=")" separator="," item="office">
+				#{office.id}
+			</foreach>
+		</if>
+	</select>
+	<!--首页左侧树结构显示所需的人员加载查询-->
+	<select id="getDrugsterAdbByOffice" resultMap="drugster">
+		select
+			<include refid="drugsterColumns"></include>
+		,gbu.MSISDN as dbMobileNo,sk.online as skOnline,file.file_path as photoPath
+		from gongan_db.fm_drugster d
+		left join gbdatabase.userinfo gbu on gbu.MSISDN = d.phone
+		left join sys_file file on file.id=d.photo_id and file.deleted=1
+		left join gongan_db.smu_pin_state sk on sk.imei = d.imei
+		where d.deleted=1
+		<if test="offices != null and offices.size() > 0">
+			and d.office_id in
+			<foreach collection="offices" open="(" close=")" separator="," item="office">
+				#{office.id}
+			</foreach>
+		</if>
+	</select>
+	
+	<select id="getPersonStatistics" resultMap="drugster">
+		select
+		d.id,o.id as officeId,o.name,count(case when d.persontype=1 then 1 end) as 'DrugsterNum',
+		count(case when d.persontype=2 then 2 end) as 'RemandNum',
+		count(case
+		when d.persontype=3 then 3 end) as 'MonitorNum',
+		d.office_id,
+		o.name
+		from
+		fm_drugster d
+		left join sys_office o on o.id = d.office_id
+		group by
+		d.office_id
+	</select>
+	
+	<!--订购统计-->
+	<select  id="getOrderStatistics" resultMap="drugster">
+		 SELECT c.office_id,e.personCount,c.dgCount FROM (
+		 SELECT office_id,COUNT(office_id) AS dgCount FROM gongan_db.fm_drugster a
+		LEFT JOIN gbdatabase.userinfo b
+		ON a.phone=b.msisdn
+		 WHERE a.deleted=1 AND b.OprCode='03' GROUP BY a.office_id) c
+		 INNER JOIN
+		 (SELECT office_id,COUNT(office_id) AS personCount FROM gongan_db.fm_drugster d
+		 WHERE d.deleted=1  GROUP BY d.office_id) e
+		 ON c.office_id=e.office_id
+	</select>
+	<select id="checkDrugster" resultMap="drugster">
+		select <include refid="drugsterColumns"></include>
+		from fm_drugster d
+		where d.deleted = 1
+		<if test="selfId != null and selfId != ''">
+			and d.id != #{selfId}
+		</if>
+		<choose>
+			<when test="(phone != null and phone != '') or (idCard != null and idCard != '') or (imei != null and imei != '')">
+				and( 1=2 
+				<if test="phone != null and phone != ''">
+					or d.phone = #{phone}
+				</if>
+				<if test="idCard != null and idCard != ''">
+					or d.id_card = #{idCard}
+				</if>
+				<if test="imei != null and imei != ''">
+					or d.imei = #{imei}
+				</if>
+				)
+			</when>
+			<otherwise>
+				and 1=2
+			</otherwise>
+		</choose>
+	</select>
+	<insert id="insert">
+		insert into fm_drugster (
+			<include refid="drugsterColumns2" />
+		) values(
+		#{id},	
+		#{name},
+		#{nickname},
+		#{sex},
+		#{minorities},
+		#{height},
+		#{idCard},
+		#{identifyType},
+		#{phone},
+		#{birthday},
+		#{officeId},
+		#{persontype},
+		#{personState},
+		#{servicePlace},
+		#{hometownPolice},
+		#{hometownDetails},
+		#{domicilePolice},
+		#{domicileDetalis},
+		#{photoId},
+		#{drugtype},
+		#{discoverTime,jdbcType=TIMESTAMP},
+		#{discoverPlace},
+		#{discoverUnit},
+		#{manageSituation},
+		#{manageTime,jdbcType=TIMESTAMP},
+		#{managePlace},
+		#{breakLawFact},		
+		#{abandonDrugType},
+		#{abandonDrugStarttime,jdbcType=TIMESTAMP},
+		#{abandonDruglength},
+		#{abandonDrugEndtime,jdbcType=TIMESTAMP},
+		#{goOutReason},
+		#{isAids},
+		#{rehabilitationAgency},
+		#{rehabilitationlength},
+		#{rehabilitationStarttime,jdbcType=TIMESTAMP},
+		#{goOutTime,jdbcType=TIMESTAMP},
+		#{drugsterSource},
+		#{treatStarttime,jdbcType=TIMESTAMP},		
+		#{treatPlace},
+		#{outOfContraltime,jdbcType=TIMESTAMP},
+		#{treatUnit},
+		#{jzInstitution},
+		#{casetype},
+		#{jzStarttime,jdbcType=TIMESTAMP},
+		#{jzEndtime,jdbcType=TIMESTAMP},
+		#{jzlength},
+		#{sinfact},
+		#{lgUnit},
+		#{lgUnitDetails},
+		#{lgPoliceman},		
+		#{lgDatetime,jdbcType=TIMESTAMP},
+		#{ruleTown},
+		#{ruleCommunity},
+		#{helpname},
+		#{helptype},
+		#{helpmanPosition},
+		#{helpmanUnit},
+		#{helpmanPhone},
+		#{urineTestTime,jdbcType=TIMESTAMP},
+		#{urineTest},
+		#{imei},		
+		#{pid},		
+		#{remarks},
+		#{createrId},		
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateId},		
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{deleted},	
+		#{monitorAreaId},
+		#{online},
+		#{monitorStarttime,jdbcType=TIMESTAMP},
+		#{monitorEndtime,jdbcType=TIMESTAMP},
+		#{remandStarttime,jdbcType=TIMESTAMP},
+		#{remandEndtime,jdbcType=TIMESTAMP},
+		#{lawOffice},
+		#{lawName},
+		#{lawPhone}		
+		)
+	</insert>
+	<update id="update" >
+		update fm_drugster set	
+		name=#{name},
+		nickname=#{nickname},
+		sex=#{sex},
+		minorities=#{minorities},
+		height=#{height},
+		id_card=#{idCard},
+		identifyType=#{identifyType},
+		phone=#{phone},
+		birthday=#{birthday},	
+		office_id=#{officeId},	
+		persontype=#{persontype},
+		personState=#{personState},
+		servicePlace=#{servicePlace},
+		hometownPolice=#{hometownPolice},
+		hometownDetails=#{hometownDetails},
+		domicilePolice=#{domicilePolice},
+		domicileDetalis=#{domicileDetalis},
+		<if test="photoId != null and photoId != ''">
+			photo_id=#{photoId},
+		</if>
+		drugtype=#{drugtype},
+		discoverTime=#{discoverTime,jdbcType=TIMESTAMP},
+		discoverPlace=#{discoverPlace},
+		discoverUnit=#{discoverUnit},
+		manageSituation=#{manageSituation},
+		manageTime=#{manageTime,jdbcType=TIMESTAMP},
+		managePlace=#{managePlace},
+		breakLawFact=#{breakLawFact},		
+		abandonDrugType=#{abandonDrugType},
+		abandonDrugStarttime=#{abandonDrugStarttime,jdbcType=TIMESTAMP},
+		abandonDruglength=#{abandonDruglength},
+		abandonDrugEndtime=#{abandonDrugEndtime,jdbcType=TIMESTAMP},
+		goOutReason=#{goOutReason},
+		isAids=#{isAids},
+		rehabilitationAgency=#{rehabilitationAgency},
+		rehabilitationlength=#{rehabilitationlength},
+		rehabilitationStarttime=#{rehabilitationStarttime,jdbcType=TIMESTAMP},
+		goOutTime=#{goOutTime,jdbcType=TIMESTAMP},
+		drugsterSource=#{drugsterSource},
+		treatStarttime=#{treatStarttime,jdbcType=TIMESTAMP},		
+		treatPlace=#{treatPlace},
+		outOfContraltime=#{outOfContraltime,jdbcType=TIMESTAMP},
+		treatUnit=#{treatUnit},
+		jzInstitution=#{jzInstitution},
+		casetype=#{casetype},
+		jzStarttime=#{jzStarttime,jdbcType=TIMESTAMP},
+		jzEndtime=#{jzEndtime,jdbcType=TIMESTAMP},
+		jzlength=#{jzlength},
+		sinfact=#{sinfact},
+		lgUnit=#{lgUnit},
+		lgUnitDetails=#{lgUnitDetails},
+		lgPoliceman=#{lgPoliceman},		
+		lgDatetime=#{lgDatetime,jdbcType=TIMESTAMP},
+		ruleTown=#{ruleTown},
+		ruleCommunity=#{ruleCommunity},
+		helpname=#{helpname},
+		helptype=#{helptype},
+		helpmanPosition=#{helpmanPosition},
+		helpmanUnit=#{helpmanUnit},
+		helpmanPhone=#{helpmanPhone},
+		urineTestTime=#{urineTestTime,jdbcType=TIMESTAMP},
+		urineTest=#{urineTest},
+		imei=#{imei},
+		pid=#{pid},		
+		remarks=#{remarks},
+		creater_id=#{createrId},		
+		create_time=#{createTime,jdbcType=TIMESTAMP},
+		update_id=#{updateId},		
+		update_time=#{updateTime,jdbcType=TIMESTAMP},
+		deleted=#{deleted},	
+		monitor_area_id=#{monitorAreaId},
+		online=#{online},
+		monitorStarttime=#{monitorStarttime},
+		monitorEndtime=#{monitorEndtime},
+		remandStarttime=#{remandStarttime},
+		remandEndtime=#{remandEndtime},
+		lawOffice=#{lawOffice},
+		lawName=#{lawName},
+		lawPhone=#{lawPhone}		
+		where id = #{id}
+	</update>
+	<update id="deleteById">
+		update fm_drugster set deleted=0 where id=#{id}
+	</update>
+	<update id="setArea">
+		update fm_drugster
+		set
+		monitor_area_id = #{monitorAreaId}
+		where id=#{id}
+	</update>
+	<!-- 临时的方法，设置在线状态以后要移入到redis。 -->
+	<update id="setOnline">
+		update fm_drugster
+		set
+		online = #{online}
+		where id=#{id} or id_card = #{id}
+	</update>
+</mapper>

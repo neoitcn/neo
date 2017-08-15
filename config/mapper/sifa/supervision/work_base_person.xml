@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.supervision.WorkBasePersonDao">
+	
+	<sql id="workBasePersonColumns">
+		wb.id, wb.base_name, wb.leader, wb.start_time, wb.corr_company, wb.name, wb.phone, wb.work_content, wb.performance, 
+   		 wb.remarks, wb.creater_id, wb.create_time, wb.update_id, wb.update_time, wb.deleted
+	</sql>
+	<sql id="workBasePersonColumns2">
+		id, base_name, leader, start_time, corr_company, name, phone, work_content, performance, 
+   		 remarks, creater_id, create_time, update_id, update_time, deleted
+	</sql>
+	
+  <resultMap id="workBasePersonMap" type="WorkBasePerson" extends="baseBean">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="base_name" jdbcType="VARCHAR" property="baseName" />
+    <result column="leader" jdbcType="VARCHAR" property="leader" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="corr_company" jdbcType="VARCHAR" property="corrCompany" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="work_content" jdbcType="INTEGER" property="workContent" />
+    <result column="performance" jdbcType="INTEGER" property="performance" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+  </resultMap>
+  <resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	<select id="getWorkBasePersons" resultMap="workBasePersonMap">
+		select
+			<include refid="workBasePersonColumns"></include>
+		from mn_work_base_person wb where wb.deleted=1
+		<if test="baseName != null and baseName != ''">
+			and wb.base_name like concat('%',#{baseName},'%')
+		</if>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	<select id="getCount" resultType="java.lang.Long">
+		select
+			count(id)
+		from mn_work_base_person wb where wb.deleted=1
+		<if test="baseName != null and baseName != ''">
+			and wb.base_name like concat('%',#{baseName},'%')
+		</if>
+	</select>
+	<select id="getWorkBasePersonById" resultMap="workBasePersonMap">
+		select
+			<include refid="workBasePersonColumns"></include>
+		from mn_work_base_person wb where wb.deleted=1 and wb.id=#{id}
+	</select>
+  <insert id="addWorkBasePerson">
+    insert into mn_work_base_person (
+    	<include refid="workBasePersonColumns2"></include>
+      )
+    values (#{id,jdbcType=VARCHAR}, #{baseName,jdbcType=VARCHAR}, #{leader,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{corrCompany,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{workContent,jdbcType=VARCHAR}, #{performance,jdbcType=INTEGER}, 
+      #{remarks,jdbcType=VARCHAR}, #{createrId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateWorkBasePerson">
+    update mn_work_base_person
+    set
+      base_name = #{baseName,jdbcType=VARCHAR},
+      leader = #{leader,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      corr_company = #{corrCompany,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      work_content = #{workContent,jdbcType=VARCHAR},
+      performance = #{performance,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      update_id = #{updateId,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      deleted = #{deleted,jdbcType=INTEGER}
+     where id=#{id}
+  </update>
+  <update id="deleteWorkBasePerson">
+  	update mn_work_base_person set deleted=0 where id=#{id}
+  </update>
+</mapper>

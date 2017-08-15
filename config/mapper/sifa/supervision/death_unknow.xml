@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.supervision.DeathUnknowDao">
+ <sql id="deathUnknowColumns">
+    du.id, du.event_type, du.corr_company, du.leader, du.name, du.phone, du.input_time, du.handle_result, du.reason, 
+    du.remarks, du.creater_id, du.create_time, du.update_id, du.update_time, du.deleted,du.office_id,du.office_name
+  </sql>
+ <sql id="deathUnknowColumns2">
+    id, event_type, corr_company, leader, name, phone, input_time, handle_result, reason, 
+    remarks, creater_id, create_time, update_id, update_time, deleted,office_id,office_name
+  </sql>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+  <resultMap id="deathUnknowMap" type="DeathUnknow" extends="baseBean">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="event_type" jdbcType="INTEGER" property="eventType" />
+    <result column="corr_company" jdbcType="VARCHAR" property="corrCompany" />
+    <result column="leader" jdbcType="VARCHAR" property="leader" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="input_time" jdbcType="TIMESTAMP" property="inputTime" />
+    <result column="handle_result" jdbcType="INTEGER" property="handleResult" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="office_id" jdbcType="INTEGER" property="officeId" />
+	<result column="office_name" jdbcType="VARCHAR" property="officeName" />
+  </resultMap>
+  <select id="getDeathUnknows" resultMap="deathUnknowMap">
+  	select
+  		<include refid="deathUnknowColumns"></include>
+  	from mn_death_unknow du where du.deleted=1
+  	<if test="name != null and name != ''">
+  		and du.name like concat('%',#{name},'%')
+  	</if>
+  	<if test="admin == null or admin != 1">
+		<choose>
+			<when test="offices == null or offices.size() == 0">
+				and 1=2
+			</when>
+			<otherwise>
+				and du.office_id in
+				<foreach collection="offices" open="(" close=")" item="office" separator=",">
+					#{office.id}
+				</foreach>
+			</otherwise>
+		</choose>
+  	</if>
+  	<if test="rows > 0">
+  		limit #{start} , #{rows}
+  	</if>
+  </select>
+  <select id="getCount" resultType="java.lang.Long">
+  	select
+  		count(id)
+  	from mn_death_unknow du where du.deleted=1
+  	<if test="name != null and name != ''">
+  		and du.name like concat('%',#{name},'%')
+  	</if>
+  	<if test="admin == null or admin != 1">
+		<choose>
+			<when test="offices == null or offices.size() == 0">
+				and 1=2
+			</when>
+			<otherwise>
+				and du.office_id in
+				<foreach collection="offices" open="(" close=")" item="office" separator=",">
+					#{office.id}
+				</foreach>
+			</otherwise>
+		</choose>
+  	</if>
+  </select>
+  <select id="getDeathUnknowById" resultMap="deathUnknowMap">
+  	select
+  		<include refid="deathUnknowColumns"></include>
+  	from mn_death_unknow du where du.deleted=1 and du.id=#{id}
+  </select>
+  <insert id="addDeathUnknow">
+    insert into mn_death_unknow (
+		<include refid="deathUnknowColumns2"></include>
+      )
+    values (#{id,jdbcType=VARCHAR}, #{eventType,jdbcType=INTEGER}, #{corrCompany,jdbcType=VARCHAR}, 
+      #{leader,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{inputTime,jdbcType=TIMESTAMP}, #{handleResult,jdbcType=INTEGER}, #{reason,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{createrId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=INTEGER},
+      #{officeId,jdbcType=INTEGER}, #{officeName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateDeathUnknow">
+    update mn_death_unknow
+    set 
+	      event_type = #{eventType,jdbcType=INTEGER},
+	      corr_company = #{corrCompany,jdbcType=VARCHAR},
+	      leader = #{leader,jdbcType=VARCHAR},
+	      name = #{name,jdbcType=VARCHAR},
+	      phone = #{phone,jdbcType=VARCHAR},
+	      input_time = #{inputTime,jdbcType=TIMESTAMP},
+	      handle_result = #{handleResult,jdbcType=INTEGER},
+	      reason = #{reason,jdbcType=VARCHAR},
+	      remarks = #{remarks,jdbcType=VARCHAR},
+	      update_id = #{updateId,jdbcType=VARCHAR},
+	      update_time = #{updateTime,jdbcType=TIMESTAMP},
+	      deleted = #{deleted,jdbcType=INTEGER},
+	      office_id=#{officeId,jdbcType=INTEGER},
+	      office_name=#{officeName,jdbcType=VARCHAR}
+      where id=#{id}
+    </update>
+    <update id="deleteDeathUnknow">
+    	update mn_death_unknow set deleted=0 where id=#{id}
+    </update>
+</mapper>

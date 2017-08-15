@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sys.dao.MenuDao">
+	<sql id="menuColumns">
+		m.id,
+		m.parent_id,
+		m.name,
+		m.url,
+		m.icon,
+		m.creater_id,
+		m.create_time,
+		m.update_id,
+		m.update_time,
+		m.sort,
+		m.deleted,
+		m.enabled,
+		m.parent_ids,
+		m.controller_name,
+		m.icon_url
+	</sql>
+	<sql id="menuColumns2">
+		parent_id,
+		name,
+		url,
+		icon,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		sort,
+		deleted,
+		enabled,
+		parent_ids,
+		controller_name,
+		icon_url
+	</sql>
+	<resultMap type="Menu" id="menuMap" extends="baseBean">
+		<id column="id" property="id"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="name" property="name"/>
+		<result column="url" property="url"/>
+		<result column="sort" property="sort"/>
+		<result column="icon" property="icon"/>
+		<result column="parent_ids" property="parentIds"/>
+		<result column="controller_name" property="controllerName"/>
+		<result column="icon_url" property="iconUrl"/>
+	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+    
+	<select id="getAllMenuList" resultMap="menuMap" >
+		SELECT 
+			<include refid="menuColumns"/>
+		FROM sys_menu m where m.deleted=1
+		<if test="enabled != -1">
+			and m.enabled=#{enabled}
+		</if>
+		order by case when isnull(m.sort) then 1 else 0 end asc,m.sort asc
+	</select>
+	
+	<select id="getMenuByParentId" resultMap="menuMap" parameterType="java.lang.String">
+		SELECT 
+			<include refid="menuColumns"/>
+		FROM sys_menu m where m.deleted=1 and m.enabled=1 and m.parent_id=#{parentId}
+		order by order by case when isnull(m.sort) then 1 else 0 end asc,m.sort asc
+	</select>
+	<select id="getMenuDetail" resultMap="menuMap">
+		SELECT 
+			<include refid="menuColumns"/>
+		FROM sys_menu m 
+		where m.deleted=1 and m.id=#{id}
+	</select>
+	<!-- 获取当前菜单的子节点 -->
+	<select id="getMenuChildren" resultMap="menuMap">
+		SELECT
+		 <include refid="menuColumns"/>,u.name as createrName
+		FROM sys_menu m 
+		left join sys_user u on u.id = m.creater_id
+		where m.id=#{id} or m.parent_ids REGEXP concat('^(.*,)?',#{id},'(,(.*))?$') and m.deleted=1
+		order by m.parent_id asc,case when isnull(m.sort) then 1 else 0 end asc,m.sort asc
+	</select>
+	<!-- 根据ControllerName获取菜单，如果controllerName为空，则不获取 -->
+	<select id="getMenuByControllerName" resultMap="menuMap">
+		SELECT 
+			<include refid="menuColumns"/>
+		FROM sys_menu m 
+		where m.deleted=1 and m.controller_name = #{controllerName}
+	</select>
+	<insert id="saveMenu" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_menu (
+			<include refid="menuColumns2"></include>
+		) values(
+			#{parentId},
+			#{name},
+			#{url},
+			#{icon},
+			#{createrId},
+			#{createTime},
+			#{updateId},
+			#{updateTime},
+			#{sort},
+			#{deleted},
+			#{enabled},
+			#{parentIds},
+			#{controllerName},
+			#{iconUrl}
+		)
+	</insert>
+	
+	<update id="updateMenu">
+		update sys_menu set
+			parent_id=#{parentId},
+			name=#{name},
+			url=#{url},
+			icon=#{icon},
+			update_id=#{updateId},
+			update_time=#{updateTime},
+			sort=#{sort},
+			deleted=#{deleted},
+			enabled=#{enabled},
+			parent_ids=#{parentIds},
+			controller_name=#{controllerName},
+			icon_url=#{iconUrl}
+		where id=#{id}
+	</update>
+	<!-- <update id="deleteMenu">
+		update sys_menu set
+			deleted = 0
+		where id=#{id}
+	</update> -->
+	<delete id="deleteMenu">
+		delete from sys_menu where id=#{id}
+	</delete>
+</mapper>

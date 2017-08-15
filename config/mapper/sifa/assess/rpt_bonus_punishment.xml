@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.assess.RptBonusPunishmentDao">
+  <resultMap id="rptBonusPunishmentMap" type="RptBonusPunishment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="prisoner_name" jdbcType="VARCHAR" property="prisonerName" />
+    <result column="prisoner_phone" jdbcType="VARCHAR" property="prisonerPhone" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="bonus_punish_date" jdbcType="TIMESTAMP" property="bonusPunishDate" />
+    <result column="bonus_punish_type" jdbcType="BIT" property="bonusPunishType" />
+    <result column="bonus_punish_reason" jdbcType="VARCHAR" property="bonusPunishReason" /> 
+    <result column="bonus_punish_content" jdbcType="VARCHAR" property="bonusPunishContent" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="rptBonusPunishmentColumns">
+    bp.id, bp.company_name, bp.prisoner_name, bp.prisoner_phone, bp.operator, bp.bonus_punish_date, bp.bonus_punish_type, 
+    bp.bonus_punish_reason, bp.bonus_punish_content, bp.remarks, bp.state
+  </sql>
+  <sql id="rptBonusPunishmentColumns2">
+    id, company_name, prisoner_name, prisoner_phone, operator, bonus_punish_date, bonus_punish_type, 
+    bonus_punish_reason, bonus_punish_content, remarks, state
+  </sql>
+  <select id="getRptBonusPunishments" resultMap="rptBonusPunishmentMap">
+  	select <include refid="rptBonusPunishmentColumns"></include>
+  	from rpt_bonus_punishment bp
+  	where 1=1
+  	<if test="prisonerName != null and prisonerName != ''">
+  		and bp.prisoner_name like concat('%',#{prisonerName},'%')
+  	</if>
+  	<if test="bonusPunishDate != null">
+  		and bp.bonus_punish_date >= #{bonusPunishDate}
+  	</if>
+  	<if test="rows > 0">
+  		limit #{start},#{rows}
+  	</if>
+  </select>
+  <select id="getCount" resultType="java.lang.Long">
+  	select count(id)
+  	from rpt_bonus_punishment bp
+  	where 1=1
+  	<if test="prisonerName != null and prisonerName != ''">
+  		and bp.prisoner_name like concat('%',#{prisonerName},'%')
+  	</if>
+  	<if test="bonusPunishDate != null">
+  		and bp.bonus_punish_date >= #{bonusPunishDate}
+  	</if>
+  </select>
+  <select id="getRptBonusPunishmentById" resultMap="rptBonusPunishmentMap">
+  	select <include refid="rptBonusPunishmentColumns"></include>
+  	from rpt_bonus_punishment bp
+  	where bp.id=#{id}
+  </select>
+  <insert id="addRptBonusPunishment">
+    insert into rpt_bonus_punishment (
+    	<include refid="rptBonusPunishmentColumns2"></include>
+    )
+    values (#{id,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{prisonerName,jdbcType=VARCHAR}, 
+      #{prisonerPhone,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{bonusPunishDate,jdbcType=TIMESTAMP}, 
+      #{bonusPunishType,jdbcType=BIT}, #{bonusPunishReason,jdbcType=VARCHAR}, #{bonusPunishContent,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER})
+  </insert>
+  <update id="updateRptBonusPunishment">
+    update rpt_bonus_punishment
+    set company_name = #{companyName,jdbcType=VARCHAR},
+      prisoner_name = #{prisonerName,jdbcType=VARCHAR},
+      prisoner_phone = #{prisonerPhone,jdbcType=VARCHAR},
+      operator = #{operator,jdbcType=VARCHAR},
+      bonus_punish_date = #{bonusPunishDate,jdbcType=TIMESTAMP},
+      bonus_punish_type = #{bonusPunishType,jdbcType=BIT},
+      bonus_punish_reason = #{bonusPunishReason,jdbcType=VARCHAR},
+      bonus_punish_content = #{bonusPunishContent,jdbcType=VARCHAR},
+      remarks = #{remarks,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="handleRptBonusPunishment">
+  	update rpt_bonus_punishment set state = 0
+  	where id=#{id}
+  </update>
+</mapper>

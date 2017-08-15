@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.aofa.sifa.mapper.docm.GuarderDao">
+  <!-- 
+  	数据库连字符示例
+  	<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+	<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+	<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+   -->
+  	<sql id="guarderColumns">
+  		g.id,
+		g.name,
+		g.id_card,
+		g.sex,
+		g.birthday,
+		g.phone,
+		g.job,
+		g.by_guarder,
+		g.by_guarder_relation,
+		g.home_addr,
+		g.remarks,
+		g.operator,
+		g.creater_id,
+		g.create_time,
+		g.update_id,
+		g.update_time,
+		g.deleted,
+		g.enabled
+  	</sql>
+  	<sql id="guarderColumns2">
+  		id,
+		name,
+		id_card,
+		sex,
+		birthday,
+		phone,
+		job,
+		by_guarder,
+		by_guarder_relation,
+		home_addr,
+		remarks,
+		operator,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted,
+		enabled
+  	</sql>
+  
+  	<resultMap type="Guarder" id="guarderMap">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="id_card" property="idCard"/>
+		<result column="sex" property="sex"/>
+		<result column="birthday" property="birthday"/>
+		<result column="phone" property="phone"/>
+		<result column="job" property="job"/>
+		<result column="by_guarder" property="byGuarder"/>
+		<result column="by_guarder_relation" property="byGuarderRelation"/>
+		<result column="home_addr" property="homeAddr" />
+		<result column="remarks" property="remarks" />
+		<result column="operator" property="operator" />
+	</resultMap>
+  	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	
+	<select id="getGuarders" resultMap="guarderMap">
+		select 
+			<include refid="guarderColumns" />
+		from fm_guarder g where g.deleted=1
+		<if test="name != null and name != ''">
+			and g.name like concat('%',#{name},'%')
+		</if>
+		<if test="idCard != null and idCard != ''">
+			and g.id_card like concat('%',#{idCard},'%')
+		</if>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	
+	<select id="getGuarderById" resultMap="guarderMap">
+		select 
+			<include refid="guarderColumns"></include>
+		from fm_guarder g where g.deleted=1 and g.id=#{id}
+	</select>
+	<select id="getCount" resultType="java.lang.Long">
+    	select count(id) from fm_guarder g where g.deleted=1
+    	<if test="name != null and name != ''">
+			and g.name like concat('%',#{name},'%')
+		</if>
+		<if test="idCard != null and idCard != ''">
+			and g.id_card like concat('%',#{idCard},'%')
+		</if>
+    </select>
+    
+	
+	<insert id="addGuarder" parameterType="Guarder" >
+		insert into fm_guarder (
+			<include refid="guarderColumns2" />
+		) values (
+			#{id},
+			#{name},
+			#{idCard},
+			#{sex},
+			#{birthday,jdbcType=TIMESTAMP},
+			#{phone},
+			#{job,jdbcType=VARCHAR},
+			#{byGuarder,jdbcType=VARCHAR},
+			#{byGuarderRelation,jdbcType=VARCHAR},
+			#{homeAddr},		
+			#{remarks},
+			#{operator},
+			#{createrId,jdbcType=VARCHAR},
+			#{createTime,jdbcType=TIMESTAMP},			
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{updateId},
+			#{deleted},
+			#{enabled}
+			
+		)
+	</insert>
+	<update id="updateGuarder" parameterType="Guarder">
+		update fm_guarder set 		
+		name=#{name},
+		id_card=#{idCard},
+		sex=#{sex},
+		birthday=#{birthday},
+		phone=#{phone},
+		job=#{job},
+		by_guarder=#{byGuarder},
+		by_guarder_relation=#{byGuarderRelation},
+		home_addr=#{homeAddr},
+		remarks=#{remarks},
+		operator=#{operator},
+		where id=#{id}
+	</update>
+	
+	<update id="deleteGuarderById" parameterType="java.lang.String">
+		update fm_guarder g set g.deleted=0 where g.id=#{id}
+	</update>
+</mapper>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sys.dao.SysFileDao">
+	<sql id="fileColumns">
+		f.id,
+		f.file_name,
+		f.file_type,
+		f.length,
+		f.file_path,
+		f.object_id,
+		f.creater_id,
+		f.create_time,
+		f.update_id,
+		f.update_time,
+		f.deleted
+	</sql>
+	<sql id="fileColumns2">
+		id,
+		file_name,
+		file_type,
+		length,
+		file_path,
+		object_id,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted
+	</sql>
+	<resultMap type="SysFile" id="SysFile" extends="baseBean">
+		<id column="id" property="id"/>
+		<result column="file_name" property="fileName"/>
+		<result column="file_type" property="fileType"/>
+		<result column="length" property="fileLength"/>
+		<result column="file_path" property="filePath"/>
+		<result column="object_id" property="objectId"/>
+	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	<select id="getFiles" resultMap="SysFile">
+    	select 
+    		<include refid="fileColumns"></include>
+    	from sys_file f where f.deleted=1
+    	<if test="fileName !=null and fileName != ''">
+    		and f.file_name like concat('%',#{fileName},'%')
+    	</if>
+    	<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	<select id="getFileDetail" resultMap="SysFile">
+		select 
+			<include refid="fileColumns"></include>
+		from
+			sys_file f
+		where f.id=#{id}
+	</select>
+	<select id="getFileCount" resultType="java.lang.Long">
+		select 
+    		count(*)
+    	from sys_file f where f.deleted=1
+    	<if test="fileName !=null and fileName != ''">
+    		and f.file_name like concat('%',#{fileName},'%')
+    	</if>
+	</select>
+	<select id="getFileByObjectId" resultMap="SysFile">
+		select
+			<include refid="fileColumns"></include>
+		from
+			sys_file f
+		where f.object_id=#{objectId}
+	</select>
+	<insert id="saveFile">
+		insert into sys_file(
+			<include refid="fileColumns2"></include>
+		)values(
+			#{id},
+			#{fileName},
+			#{fileType},
+			#{fileLength},
+			#{filePath},
+			#{objectId},
+			#{createrId},
+			#{createTime},
+			#{updateId},
+			#{updateTime},
+			#{deleted}
+		)
+	</insert>
+	<delete id="deleteFile">
+		delete from sys_file where id=#{id}
+	</delete>
+	<delete id="deleteFileByObjectId">
+		delete from sys_file where object_id=#{objectId}
+	</delete>
+</mapper>

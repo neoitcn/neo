@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.diary.HandRecordsDao">
+
+	<sql id="handRecordsColumns">
+		hr.id,
+		hr.name,
+		hr.receiver,
+		hr.receiver_phone,
+		hr.hand_reason,
+		hr.corr_company,
+		hr.hand_time,
+		hr.remarks,
+		hr.phone,
+		hr.hand_company,
+		hr.creater_id,
+		hr.create_time,
+		hr.update_id,
+		hr.update_time,
+		hr.deleted
+	</sql>
+
+	<sql id="handRecordsColumns2">
+		id,
+		name,
+		receiver,
+		receiver_phone,
+		hand_reason,
+		corr_company,
+		hand_time,
+		remarks,
+		phone,
+		hand_company,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted
+	</sql>
+	<resultMap id="handRecords" type="HandRecords" extends="baseBean">
+	    <id column="id" jdbcType="VARCHAR" property="id" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="receiver" jdbcType="VARCHAR" property="receiver" />
+	    <result column="receiver_phone" jdbcType="VARCHAR" property="receiverPhone" />
+	    <result column="hand_reason" jdbcType="VARCHAR" property="handReason" />
+	    <result column="corr_company" jdbcType="VARCHAR" property="corrCompany" />
+	    <result column="hand_time" jdbcType="TIMESTAMP" property="handTime" />
+	    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+	    <result column="phone" jdbcType="VARCHAR" property="phone" />
+	    <result column="hand_company" jdbcType="VARCHAR" property="handCompany" />
+	</resultMap>
+		<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	<select id="getHandRecourds" resultMap="handRecords">
+		select
+			<include refid="handRecordsColumns"></include>
+		from dm_hand_records hr where hr.deleted = 1
+		<if test="name !=null and name!=''">
+			and hr.name=#{name}
+		</if>
+		<if test="handTime != null">
+			and hr.hand_time>#{handTime}
+		</if>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+	</select>
+	<select id="getHandRecourdsById" resultMap="handRecords">
+		select
+			<include refid="handRecordsColumns"></include>
+		from dm_hand_records hr where hr.deleted = 1 and hr.id=#{id}
+	</select>
+	<select id="getCount" resultType="java.lang.Long">
+		select count(*) from dm_hand_records where deleted=1
+	</select>
+  <insert id="addHandRecords">
+    insert into dm_hand_records (
+      <include refid="handRecordsColumns2"></include>
+      )values(
+        #{id,jdbcType=VARCHAR},
+        #{name,jdbcType=VARCHAR},
+        #{receiver,jdbcType=VARCHAR},
+        #{receiverPhone,jdbcType=VARCHAR},
+        #{handReason,jdbcType=VARCHAR},
+        #{corrCompany,jdbcType=VARCHAR},
+        #{handTime,jdbcType=TIMESTAMP},
+        #{remarks,jdbcType=VARCHAR},
+        #{phone,jdbcType=VARCHAR},
+        #{handCompany,jdbcType=VARCHAR},
+        #{createrId,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{updateId,jdbcType=VARCHAR},
+        #{updateTime,jdbcType=TIMESTAMP},
+        #{deleted,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateHandRecords">
+    update dm_hand_records set
+        name = #{name,jdbcType=VARCHAR},
+        receiver = #{receiver,jdbcType=VARCHAR},
+        receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+        hand_reason = #{handReason,jdbcType=VARCHAR},
+        corr_company = #{corrCompany,jdbcType=VARCHAR},
+        hand_time = #{handTime,jdbcType=TIMESTAMP},
+        remarks = #{remarks,jdbcType=VARCHAR},
+        phone = #{phone,jdbcType=VARCHAR},
+        hand_company = #{handCompany,jdbcType=VARCHAR},
+        update_id = #{updateId,jdbcType=VARCHAR},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        deleted = #{deleted,jdbcType=INTEGER}
+    where id=#{id}
+  </update>
+  <update id="deleteHandRecords">
+  	update dm_hand_records set deleted=0 where id=#{id}
+  </update>
+</mapper>

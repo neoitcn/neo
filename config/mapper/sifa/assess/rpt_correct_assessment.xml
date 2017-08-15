@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.assess.RptCorrectAssessmentDao">
+  <resultMap id="rptCorrectAssessmentMap" type="RptCorrectAssessment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="prisoner_name" jdbcType="VARCHAR" property="prisonerName" />
+    <result column="prisoner_phone" jdbcType="VARCHAR" property="prisonerPhone" />
+    <result column="assessor_name" jdbcType="VARCHAR" property="assessorName" />
+    <result column="assessor_phone" jdbcType="VARCHAR" property="assessorPhone" />
+    <result column="value_items_1" jdbcType="SMALLINT" property="valueItems1" />
+    <result column="value_items_2" jdbcType="SMALLINT" property="valueItems2" />
+    <result column="value_items_3" jdbcType="SMALLINT" property="valueItems3" />
+    <result column="value_items_4" jdbcType="SMALLINT" property="valueItems4" />
+    <result column="value_items_5" jdbcType="SMALLINT" property="valueItems5" />
+    <result column="value_items_6" jdbcType="SMALLINT" property="valueItems6" />
+    <result column="value_items_7" jdbcType="SMALLINT" property="valueItems7" />
+    <result column="value_items_8" jdbcType="SMALLINT" property="valueItems8" />
+    <result column="value_items_9" jdbcType="SMALLINT" property="valueItems9" />
+    <result column="value_items_10" jdbcType="SMALLINT" property="valueItems10" />
+    <result column="value_items_11" jdbcType="SMALLINT" property="valueItems11" />
+    <result column="value_items_12" jdbcType="SMALLINT" property="valueItems12" />
+    <result column="value_items_13" jdbcType="SMALLINT" property="valueItems13" />
+    <result column="value_items_14" jdbcType="SMALLINT" property="valueItems14" />
+    <result column="value_items_15" jdbcType="SMALLINT" property="valueItems15" />
+    <result column="value_items_16" jdbcType="SMALLINT" property="valueItems16" />
+    <result column="value_items_17" jdbcType="SMALLINT" property="valueItems17" />
+    <result column="value_items_18" jdbcType="SMALLINT" property="valueItems18" />
+    <result column="value_items_19" jdbcType="SMALLINT" property="valueItems19" />
+    <result column="value_items_20" jdbcType="SMALLINT" property="valueItems20" />
+    <result column="value_items_21" jdbcType="SMALLINT" property="valueItems21" />
+    <result column="value_items_22" jdbcType="SMALLINT" property="valueItems22" />
+    <result column="value_total" jdbcType="INTEGER" property="valueTotal" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="creater_id" jdbcType="VARCHAR" property="createrId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="rptCorrectAssessmentColumns">
+    ca.id, ca.company_name, ca.prisoner_name, ca.prisoner_phone, ca.assessor_name, ca.assessor_phone, ca.value_items_1, 
+    ca.value_items_2, ca.value_items_3, ca.value_items_4, ca.value_items_5, ca.value_items_6, ca.value_items_7, 
+    ca.value_items_8, ca.value_items_9, ca.value_items_10, ca.value_items_11, ca.value_items_12, ca.value_items_13, 
+    ca.value_items_14, ca.value_items_15, ca.value_items_16, ca.value_items_17, ca.value_items_18, ca.value_items_19, 
+    ca.value_items_20, ca.value_items_21, ca.value_items_22, ca.value_total, ca.remarks, ca.creater_id, 
+    ca.create_time,ca.state
+  </sql>
+  <sql id="rptCorrectAssessmentColumns2">
+    id, company_name, prisoner_name, prisoner_phone, assessor_name, assessor_phone, value_items_1, 
+    value_items_2, value_items_3, value_items_4, value_items_5, value_items_6, value_items_7, 
+    value_items_8, value_items_9, value_items_10, value_items_11, value_items_12, value_items_13, 
+    value_items_14, value_items_15, value_items_16, value_items_17, value_items_18, value_items_19, 
+    value_items_20, value_items_21, value_items_22, value_total, remarks, creater_id, 
+    create_time,state
+  </sql>
+  <select id="getRptCorrectAssessments" resultMap="rptCorrectAssessmentMap">
+  	select <include refid="rptCorrectAssessmentColumns"></include>
+  	from rpt_correct_assessment ca
+  	<if test="prisonerName != null and prisonerName != ''">
+  		where prisoner_name like concat('%',#{prisonerName},'%'}
+  	</if>
+  	<if test="rows > 0">
+  		limit #{start},#{rows}
+  	</if>
+  </select>
+  <select id="getCount" resultType="java.lang.Long">
+  	select 
+  		count(id)
+  	from rpt_correct_assessment ca
+  	<if test="prisonerName != null and prisonerName != ''">
+  		where prisoner_name like concat('%',#{prisonerName},'%'}
+  	</if>
+  </select>
+  <select id="getRptCorrectAssessmentById" resultMap="rptCorrectAssessmentMap">
+  	select <include refid="rptCorrectAssessmentColumns"></include>
+  	from rpt_correct_assessment ca
+  	where ca.id=#{id}
+  </select>
+  <insert id="addRptCorrectAssessment">
+    insert into rpt_correct_assessment (
+    	<include refid="rptCorrectAssessmentColumns2"></include>
+    )
+    values (#{id,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{prisonerName,jdbcType=VARCHAR}, 
+      #{prisonerPhone,jdbcType=VARCHAR}, #{assessorName,jdbcType=VARCHAR}, #{assessorPhone,jdbcType=VARCHAR}, 
+      #{valueItems1,jdbcType=SMALLINT}, #{valueItems2,jdbcType=SMALLINT}, #{valueItems3,jdbcType=SMALLINT}, 
+      #{valueItems4,jdbcType=SMALLINT}, #{valueItems5,jdbcType=SMALLINT}, #{valueItems6,jdbcType=SMALLINT}, 
+      #{valueItems7,jdbcType=SMALLINT}, #{valueItems8,jdbcType=SMALLINT}, #{valueItems9,jdbcType=SMALLINT}, 
+      #{valueItems10,jdbcType=SMALLINT}, #{valueItems11,jdbcType=SMALLINT}, #{valueItems12,jdbcType=SMALLINT}, 
+      #{valueItems13,jdbcType=SMALLINT}, #{valueItems14,jdbcType=SMALLINT}, #{valueItems15,jdbcType=SMALLINT}, 
+      #{valueItems16,jdbcType=SMALLINT}, #{valueItems17,jdbcType=SMALLINT}, #{valueItems18,jdbcType=SMALLINT}, 
+      #{valueItems19,jdbcType=SMALLINT}, #{valueItems20,jdbcType=SMALLINT}, #{valueItems21,jdbcType=SMALLINT}, 
+      #{valueItems22,jdbcType=SMALLINT}, #{valueTotal,jdbcType=INTEGER}, #{remarks,jdbcType=VARCHAR}, 
+      #{createrId,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{state})
+  </insert>
+  <update id="updateRptCorrectAssessment">
+    update rpt_correct_assessment
+    set company_name = #{companyName,jdbcType=VARCHAR},
+      prisoner_name = #{prisonerName,jdbcType=VARCHAR},
+      prisoner_phone = #{prisonerPhone,jdbcType=VARCHAR},
+      assessor_name = #{assessorName,jdbcType=VARCHAR},
+      assessor_phone = #{assessorPhone,jdbcType=VARCHAR},
+      value_items_1 = #{valueItems1,jdbcType=SMALLINT},
+      value_items_2 = #{valueItems2,jdbcType=SMALLINT},
+      value_items_3 = #{valueItems3,jdbcType=SMALLINT},
+      value_items_4 = #{valueItems4,jdbcType=SMALLINT},
+      value_items_5 = #{valueItems5,jdbcType=SMALLINT},
+      value_items_6 = #{valueItems6,jdbcType=SMALLINT},
+      value_items_7 = #{valueItems7,jdbcType=SMALLINT},
+      value_items_8 = #{valueItems8,jdbcType=SMALLINT},
+      value_items_9 = #{valueItems9,jdbcType=SMALLINT},
+      value_items_10 = #{valueItems10,jdbcType=SMALLINT},
+      value_items_11 = #{valueItems11,jdbcType=SMALLINT},
+      value_items_12 = #{valueItems12,jdbcType=SMALLINT},
+      value_items_13 = #{valueItems13,jdbcType=SMALLINT},
+      value_items_14 = #{valueItems14,jdbcType=SMALLINT},
+      value_items_15 = #{valueItems15,jdbcType=SMALLINT},
+      value_items_16 = #{valueItems16,jdbcType=SMALLINT},
+      value_items_17 = #{valueItems17,jdbcType=SMALLINT},
+      value_items_18 = #{valueItems18,jdbcType=SMALLINT},
+      value_items_19 = #{valueItems19,jdbcType=SMALLINT},
+      value_items_20 = #{valueItems20,jdbcType=SMALLINT},
+      value_items_21 = #{valueItems21,jdbcType=SMALLINT},
+      value_items_22 = #{valueItems22,jdbcType=SMALLINT},
+      value_total = #{valueTotal,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      creater_id = #{createrId,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="handleRptCorrectAssessment">
+  	update rpt_correct_assessment
+    set state = 0
+    where id=#{id}
+  </update>
+</mapper>

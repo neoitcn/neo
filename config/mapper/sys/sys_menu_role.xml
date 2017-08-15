@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sys.dao.MenuRoleDao">
+	<sql id="sysMenuRoleColumns">
+		mr.id, mr.name, mr.role_type, mr.data_scope,
+		mr.is_sys,mr.permission,
+		mr.enabled, mr.creater_id, mr.create_time,
+		mr.update_id,
+		mr.update_time, mr.remarks, mr.deleted
+	</sql>
+	<sql id="treeColumns">
+		v.id as office_id,
+		v.parent_id,
+		v.name as office_name,
+		v.deleted as office_deleted,
+		v.enabled as office_enabled,
+		v.code,
+		v.sort as office_sort,
+		v.type,
+		v.remarks,
+		v.parent_ids,
+		v.allow_group
+	</sql>
+	<sql id="menuColumns">
+		m.id as menu_id,
+		m.parent_id,
+		m.name as menu_name,
+		m.url,
+		m.icon,
+		m.sort,
+		m.deleted as menu_deleted,
+		m.enabled as menu_enabled,
+		m.parent_ids,
+		m.controller_name,
+		m.icon_url
+	</sql>
+	<sql id="sysMenuRoleColumns2">
+		id, name, role_type, data_scope, is_sys,permission, enabled,
+		creater_id,
+		create_time,
+		update_id, update_time, remarks, deleted
+	</sql>
+	<sql id="userColumns">
+		u.id as user_id,
+		u.login_name,
+		u.no,
+		u.name as user_name,
+		u.email,
+		u.phone,
+		u.mobile,
+		u.user_type,
+		u.login_ip,
+		u.enabled as user_enabled,
+		u.login_date,
+		u.photo,
+		u.creater_id as user_creater_id,
+		u.create_time as user_create_time,
+		u.deleted as user_delete,
+		u.remarks as user_remarks,
+		u.office_id,
+		u.update_time as user_update_time,
+		u.update_id as user_update_id
+	</sql>
+	<resultMap type="User" id="userMap">
+		<id column="user_id" property="id" />
+		<result property="loginName" column="login_name" />
+		<result property="password" column="password" />
+		<result property="no" column="no" />
+		<result property="name" column="user_name" />
+		<result property="email" column="email" />
+		<result property="phone" column="phone" />
+		<result property="mobile" column="mobile" />
+		<result property="userType" column="user_type" />
+		<result property="loginIp" column="login_ip" />
+		<result property="loginDate" column="login_date" />
+		<result property="photo" column="photo" />
+		<result property="remarks" column="user_remarks" />
+		<result property="officeId" column="office_id" />
+		<result column="user_creater_id" property="createrId" />
+		<result column="user_create_time" property="createTime" />
+		<result column="user_update_id" property="updateId" />
+		<result column="user_update_time" property="updateTime" />
+		<result property="deleted" column="user_delete" />
+		<result property="enabled" column="user_enabled" />
+	</resultMap>
+	<!-- 多对多的角色对应菜单功能的菜单实体 -->
+	<resultMap type="Menu" id="menuMap">
+		<id column="menu_id" property="id" />
+		<result column="parent_id" property="parentId" />
+		<result column="menu_name" property="name" />
+		<result column="url" property="url" />
+		<result column="sort" property="sort" />
+		<result column="icon" property="icon" />
+		<result column="parent_ids" property="parentIds" />
+		<result property="deleted" column="menu_deleted" />
+		<result property="enabled" column="menu_enabled" />
+		<result property="controllerName" column="controller_name" />
+		<result property="iconUrl" column="icon_url" />
+	</resultMap>
+	<!-- 角色对应的机构的机构实体 -->
+	<resultMap type="Office" id="treeMap" extends="baseBean">
+		<id column="office_id" property="id"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="office_name" property="name"/>
+		<result column="code" property="code"/>
+		<result column="office_sort" property="sort"/>
+		<result column="type" property="type"/>
+		<result column="remarks" property="remarks"/>
+		<result column="parent_ids" property="parentIds"/>
+		<result column="allow_group" property="allowGroup"/>
+		<result property="deleted" column="office_deleted" />
+		<result property="enabled" column="office_enabled" />
+	</resultMap>
+	<resultMap id="sysMenuRoleMap" type="MenuRole"
+		extends="baseBean">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="role_type" jdbcType="VARCHAR" property="roleType" />
+		<result column="data_scope" jdbcType="CHAR" property="dataScope" />
+		<result column="is_sys" jdbcType="VARCHAR" property="isSys" />
+		<result column="permission" jdbcType="VARCHAR" property="permission" />
+		<result column="remarks" jdbcType="VARCHAR" property="remarks" />
+		<collection property="listMenu" ofType="Menu" resultMap="menuMap" />
+		<collection property="listUser" ofType="User" resultMap="userMap"></collection>
+	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId" />
+		<result column="create_time" property="createTime" />
+		<result column="update_id" property="updateId" />
+		<result column="update_time" property="updateTime" />
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+	<select id="getResultById" resultMap="sysMenuRoleMap">
+		select 
+			<include refid="sysMenuRoleColumns"></include>,
+			<include refid="menuColumns"></include>
+			,
+			<include refid="userColumns"></include>
+		from sys_role mr
+		left join sys_role_menu link on link.role_id = mr.id
+		left join sys_menu m on m.id = link.menu_id and m.deleted = 1 
+		left join sys_user_role slink on slink.role_id = mr.id
+		left join sys_user u on u.id=slink.user_id and u.deleted=1 and u.enabled=1
+<!-- 		<if test="loadOffice == 'strict'">
+			left join sys_user_role slink on slink.role_id = mr.id
+			left join sys_office v on v.id = slink.office_id and v.deleted=1 and v.enabled=1
+		</if>
+ -->		
+ 		where mr.deleted = 1 and mr.id=#{id}
+		order by case when isnull(m.sort) then 1 else 0 end asc,m.sort asc
+	</select>
+	<select id="getMenuRoleByUserId" resultMap="sysMenuRoleMap">
+		select 
+			<include refid="sysMenuRoleColumns"></include>,
+			<include refid="menuColumns"></include>
+		from sys_role mr
+		left join sys_role_menu link on link.role_id = mr.id
+		left join sys_menu m on m.id = link.menu_id and m.deleted = 1 
+		left join sys_user_role slink on slink.role_id = mr.id
+		left join sys_user u on u.id = slink.user_id
+		where mr.deleted = 1 and u.id=#{userId} and u.deleted=1 and u.enabled=1 and mr.enabled = 1
+		order by case when isnull(m.sort) then 1 else 0 end asc,m.sort asc
+	</select>
+	<select id="getResultsByParam" resultMap="sysMenuRoleMap">
+		select 
+			<include refid="sysMenuRoleColumns"></include>
+			<if test="lazy != null and lazy == 'false'">
+				,
+				<include refid="menuColumns"></include>
+			</if>
+		from sys_role mr
+		<if test="lazy != null and lazy == 'false'">
+			left join sys_role_menu link on link.role_id = mr.id
+			left join sys_menu m on m.id = link.menu_id and m.deleted = 1 
+		</if>
+		where mr.deleted = 1
+		<if test="name != null and name != ''">
+			and mr.name like concat('%',#{name},'%')
+		</if>
+	</select>
+	<insert id="insert" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_role (
+		<include refid="sysMenuRoleColumns2"></include>
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{roleType,jdbcType=VARCHAR}, #{dataScope,jdbcType=CHAR}, #{isSys,jdbcType=VARCHAR},#{permission},
+		#{enabled,jdbcType=INTEGER}, #{createrId,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateId,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{remarks,jdbcType=VARCHAR},
+		#{deleted,jdbcType=INTEGER})
+	</insert>
+	<update id="update">
+		update sys_role set 
+			name = #{name,jdbcType=VARCHAR},
+			role_type = #{roleType,jdbcType=VARCHAR},
+			data_scope = #{dataScope,jdbcType=CHAR},
+			is_sys = #{isSys,jdbcType=VARCHAR},
+			permission=#{permission},
+			enabled = #{enabled,jdbcType=INTEGER},
+			creater_id = #{createrId,jdbcType=VARCHAR},
+			create_time = #{createTime,jdbcType=TIMESTAMP},
+			update_id = #{updateId,jdbcType=VARCHAR},
+			update_time = #{updateTime,jdbcType=TIMESTAMP},
+			remarks = #{remarks,jdbcType=VARCHAR},
+			deleted = #{deleted,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<!-- 插入角色与菜单的多对多关系表 -->
+	<insert id="addMenuRoleLink">
+		insert into sys_role_menu (role_id,menu_id) values(
+		#{roleId},#{menuId}
+		)
+	</insert>
+	<!-- 插入角色与机构的多对多关系表 -->
+	<insert id="addUserRoleLink">
+		insert into sys_user_role (role_id,user_id) values(#{roleId},#{userId})
+	</insert>
+	<delete id="deleteById">
+		delete from sys_role where id=#{id}
+	</delete>
+	<!-- 通过menu删除多对多关系表，该关系由menu维护 -->
+	<delete id="deleteMenuRoleLinkByMenu">
+		delete from sys_role_menu where menu_id=#{menuId}
+	</delete>
+	<!-- 通过role删除多对多关系表，该关系由角色维护 -->
+	<delete id="deleteMenuRoleLinkByRole">
+		delete from sys_role_menu where role_id=#{roleId}
+	</delete>
+	<!-- 通过用户删除与菜单之间的关联关系 -->
+	<delete id="deleteUserLinkByUser">
+		delete from sys_user_role where user_id=#{userId}
+	</delete>
+	
+	<delete id="deleteUserLinkByDetail">
+		delete from sys_user_role where user_id=#{userId} and role_id=#{roleId}
+	</delete>
+</mapper>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.assess.RptActivistDao">
+  <resultMap id="rptActivistMap" type="RptActivist">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="prisoner_name" jdbcType="VARCHAR" property="prisonerName" />
+    <result column="prisoner_phone" jdbcType="VARCHAR" property="prisonerPhone" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="submit_level" jdbcType="VARCHAR" property="submitLevel" />
+    <result column="submit_date" jdbcType="TIMESTAMP" property="submitDate" />
+    <result column="submit_suggest" jdbcType="BIT" property="submitSuggest" />
+    <result column="select_reason" jdbcType="VARCHAR" property="selectReason" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  <sql id="rptActivistColumns">
+    a.id, a.company_name, a.prisoner_name, a.prisoner_phone, a.operator, a.submit_level, a.submit_date, 
+    a.submit_suggest, a.select_reason, a.remarks, a.state
+  </sql>
+  <sql id="rptActivistColumns2">
+    id, company_name, prisoner_name, prisoner_phone, operator, submit_level, submit_date, 
+    submit_suggest, select_reason, remarks, state
+  </sql>
+  <select id="getActivists" resultMap="rptActivistMap">
+  	select <include refid="rptActivistColumns"></include>
+  	from rpt_activist a
+  	where 1=1
+  	<if test="prisonerName != null and prisonerName != ''">
+  		and a.prisoner_name like concat('%',#{prisonerName},'%')
+  	</if>
+  	<if test="submitDate != null">
+  		and a.submit_date >= #{submitDate}
+  	</if>
+  	<if test="rows > 0">
+  		limit #{start},#{rows}
+  	</if>
+  </select>
+  <select id="getCount" resultType="java.lang.Long">
+  	select count(id)
+  	from rpt_activist a
+  	where 1=1
+  	<if test="prisonerName != null and prisonerName != ''">
+  		and a.prisonerName like concat('%',#{prisonerName},'%')
+  	</if>
+  	<if test="submitDate != null">
+  		and a.submit_date >= #{submitDate}
+  	</if>
+  </select>
+  <select id="getActivistById" resultMap="rptActivistMap">
+  	select <include refid="rptActivistColumns"></include>
+  	from rpt_activist a where a.id=#{id}
+  </select>
+  <insert id="addActivist">
+    insert into rpt_activist (
+		<include refid="rptActivistColumns2"></include>
+	)
+    values (#{id,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{prisonerName,jdbcType=VARCHAR}, 
+      #{prisonerPhone,jdbcType=VARCHAR}, #{operator,jdbcType=VARCHAR}, #{submitLevel,jdbcType=VARCHAR}, 
+      #{submitDate,jdbcType=TIMESTAMP}, #{submitSuggest,jdbcType=BIT}, #{selectReason,jdbcType=VARCHAR}, 
+      #{remarks,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER})
+  </insert>
+  <update id="updateActivist">
+    update rpt_activist
+    set id = #{record.id,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
+      prisoner_name = #{record.prisonerName,jdbcType=VARCHAR},
+      prisoner_phone = #{record.prisonerPhone,jdbcType=VARCHAR},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      submit_level = #{record.submitLevel,jdbcType=VARCHAR},
+      submit_date = #{record.submitDate,jdbcType=TIMESTAMP},
+      submit_suggest = #{record.submitSuggest,jdbcType=BIT},
+      select_reason = #{record.selectReason,jdbcType=VARCHAR},
+      remarks = #{record.remarks,jdbcType=VARCHAR},
+      state = #{record.state,jdbcType=INTEGER}
+     where id=#{id}
+  </update>
+  <update id="handleActivist">
+  	update rpt_activist set state = 0
+  	where id=#{id}
+  </update>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm.java -->
+
+	<!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->
+	<!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
+	<!-- 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="loginRealm" />
+		<property name="sessionManager" ref="sessionManager"></property>
+		<property name="cacheManager" ref="shiroCacheManager"></property>
+	</bean>
+
+	<!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
+	<!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<!-- 登录页面要跳转的地址 -->
+		<property name="loginUrl" value="/login.jsp" />
+		<!-- 登录成功跳转的地址 -->
+		<property name="successUrl" value="/pages/index.jsp" />
+		<!-- 无权限操作跳转的地址 -->
+		<property name="unauthorizedUrl" value="/un_accept.jsp" />
+		<property name="filters">
+			<map>
+				<entry key="valicateCode" value-ref="valicateCode"></entry>
+				<entry key="authc">
+					<bean class="com.neo.sys.filter.shiro.AofaAuthenticationFilter">
+						<property name="usernameParam" value="username"/>  
+					    <property name="passwordParam" value="password"/>  
+					    <property name="rememberMeParam" value="rememberMe"/>  
+					    <property name="failureKeyAttribute" value="shiroLoginFailure"/>  
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<!-- shiro拦截器拦截范围，可以拦截哪些地址 -->
+		<property name="filterChainDefinitions">
+			<value>
+				# some example chain definitions:
+				/user/valdat-image=anon
+				/user/login=valicateCode,authc
+				/pages/** = authc
+				/pages/404.html = anon
+				/resource/**=anon
+				/common/**=anon
+				#注意，这里这个user文件夹是用户自定义上传的文件所在目录。如果希望拦截此处的数据，可以在过滤器中拦截
+				/user/**=anon
+				#以下是注释示例，暂做保留。
+				#roles[admin]
+				#/docs/** = authc
+				#perms[document:read]
+				#/** = authc
+			</value>
+		</property>
+	</bean>
+
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- Session控制 -->
+	<bean id="sessionIdGenerator" class="com.neo.sys.security.SessionIdCreater"></bean>
+	<bean class="com.aofa.sys.security.ShiroSessionDao" id="sessionDAO">
+
+		<property ref="sessionIdGenerator" name="sessionIdGenerator" />
+
+	</bean>
+	<bean class="org.apache.shiro.cache.MemoryConstrainedCacheManager"
+		id="shiroCacheManager" />
+	<!-- 被注掉部分需要手动维护session，并且servlet容器的session被废弃，无法和shiro同步，基于项目，目前为了加快速度，不使用该方式。 -->
+	<!-- <bean class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager" 
+		id="sessionManager"> <property ref="sessionDAO" name="sessionDAO" /> <property 
+		name="globalSessionTimeout" value="3600000" /> session 有效时间为60分钟 （毫秒单位） <property 
+		ref="sessionValidationScheduler" name="sessionValidationScheduler" /> <property 
+		name="sessionValidationSchedulerEnabled" value="true" /> <property name="deleteInvalidSessions" 
+		value="true" /> <property name="sessionListeners"> <list> <bean class="net.forcetech.util.shiro.CuntomSessionListener"/> 
+		</list> </property> </bean> -->
+	<bean class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager"
+		id="sessionManager">
+
+	</bean>
+	<bean
+		class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler"
+		id="sessionValidationScheduler">
+		<!--定时30分钟检验一次有所session是否有效（毫秒单位） -->
+		<property name="interval" value="1800000" />
+	</bean>
+	<bean id="secureRemoteInvocationExecutor"
+		class="org.apache.shiro.spring.remoting.SecureRemoteInvocationExecutor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="loginRealm" class="com.aofa.sys.security.realm.UserRealm">
+	</bean>
+	<bean id="valicateCode" class="com.aofa.sys.filter.shiro.ValicateCodeFilter"></bean>
+	<!-- 对非Controller层方法开启shiro注解 -->
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor">
+		<property name="proxyTargetClass" value="true" />
+	</bean>
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+</beans>

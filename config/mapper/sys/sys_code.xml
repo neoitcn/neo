@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sys.dao.CodeDao">
+	<sql id="codeColumns">
+		c.id,
+		c.name,
+		c.creater_id,
+		c.create_time,
+		c.update_id,
+		c.update_time,
+		c.deleted,
+		c.enabled,
+		c.key_word
+	</sql>
+	<sql id="codeColumns2">
+		id,
+		name,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted,
+		enabled,
+		key_word
+	</sql>
+	<sql id="codeValueColumns">
+		v.id as v_id,
+		v.name as v_name,
+		v.value as v_value,
+		v.creater_id as v_creater_id,
+		v.create_time as v_create_time,
+		v.update_id as v_update_id,
+		v.update_time as v_update_time,
+		v.deleted as v_deleted,
+		v.enabled as v_enabled,
+		v.code_id
+	</sql>
+	<sql id="codeValueColumns2">
+		id,
+		name,
+		value,
+		creater_id,
+		create_time,
+		update_id,
+		update_time,
+		deleted,
+		enabled,
+		code_id
+	</sql>
+	<resultMap type="Code" id="codeMap" extends="baseBean">
+		<id column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="key_word" property="keyWord"/>
+		<collection property="listValue" resultMap="codeValueMap"></collection>
+	</resultMap>
+	<resultMap type="CodeValue" id="codeValueMap">
+		<id column="v_id" property="id"/>
+		<result column="v_name" property="name"/>
+		<result column="v_value" property="value"/>
+		<result column="v_code_id" property="codeId"/>
+		<result column="v_creater_id" property="createrId"/>
+		<result column="v_create_time" property="createTime"/>
+		<result column="v_update_id" property="updateId"/>
+		<result column="v_update_time" property="updateTime"/>
+		<result property="deleted" column="v_deleted" />
+		<result property="enabled" column="v_enabled" />
+	</resultMap>
+	<resultMap type="BaseBean" id="baseBean">
+		<result column="creater_id" property="createrId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_id" property="updateId"/>
+		<result column="update_time" property="updateTime"/>
+		<result property="deleted" column="deleted" />
+		<result property="enabled" column="enabled" />
+	</resultMap>
+    <select id="getAllCode" resultMap="codeMap">
+    	select 
+    		<include refid="codeColumns"></include>
+    	from sys_code c where c.deleted=1
+    	<if test="enabled != -1">
+    		and c.enabled=#{enabled}
+    	</if>
+	</select>
+	<select id="getCodes" resultMap="codeMap">
+    	select 
+			<include refid="codeColumns" />
+		from sys_code c where c.deleted=1
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+    </select>
+    <select id="getValuesByCodeId" resultMap="codeValueMap">
+    	select 
+    		<include refid="codeValueColumns"></include>
+    	from sys_code_value v where v.deleted=1 and v.code_id=#{codeId}
+    	<if test="enabled != -1">
+    		and v.enabled=#{enabled}
+    	</if>
+	</select>
+	<select id="getCodeValue" resultMap="codeValueMap">
+		select
+			<include refid="codeValueColumns"></include>
+		from sys_code_value v
+		left join sys_code c on c.id = v.code_id
+		where c.deleted=1 and v.deleted=1 and c.enabled=1 and v.enabled=1 
+		and c.key_word=#{keyWord} and v.value=#{value}
+	</select>
+	<insert id="saveCode" useGeneratedKeys="true" keyProperty="id">
+		insert into sys_code (
+			<include refid="codeColumns2"></include>
+		) values(
+			#{id},
+			#{name},
+			#{createrId},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateId},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{deleted},
+			#{enabled},
+			#{keyWord}
+		)
+	</insert>
+	<insert id="saveCodeValue">
+		insert into sys_code_value (
+			<include refid="codeValueColumns2"></include>
+		) values(
+			#{id},
+			#{name},
+			#{value},
+			#{createrId},
+			#{createTime,jdbcType=TIMESTAMP},
+			#{updateId},
+			#{updateTime,jdbcType=TIMESTAMP},
+			#{deleted},
+			#{enabled},
+			#{codeId}
+		)
+	</insert>
+	<update id="updateCode">
+		update sys_code set 
+			name=#{name},
+			update_id=#{updateId},
+			update_time=#{updateTime,jdbcType=TIMESTAMP},
+			deleted=#{deleted},
+			enabled=#{enabled},
+			key_word=#{keyWord}
+		where id=#{id}
+	</update>
+	<update id="updateCodeValue">
+		update sys_code_value set 
+			name=#{name},
+			value=#{value},
+			update_id=#{updateId},
+			update_time=#{updateTime,jdbcType=TIMESTAMP},
+			deleted=#{deleted},
+			enabled=#{enabled}
+		where id=#{id}
+	</update>
+	<delete id="deleteCodeById">
+		delete from sys_code where id=#{id}
+	</delete>
+	<delete id="deleteCodeValueById">
+		delete from sys_code_value where id=#{id}
+	</delete>
+	<delete id="deleteCodeValueByCodeId">
+		delete from sys_code_value where code_id=#{codeId}
+	</delete>
+	<select id="getCodeById" resultMap="codeMap">
+		select 
+			<include refid="codeColumns"></include>,
+			<include refid="codeValueColumns"></include>
+		from sys_code c 
+		left join sys_code_value v on v.code_id = c.id and v.enabled = 1 and v.deleted = 1
+		where c.deleted=1 and c.id=#{id}
+	</select>
+	<select id="getCodeValueById" resultMap="codeValueMap">
+		select 
+			<include refid="codeValueColumns" ></include>
+		from sys_code_value v where v.deleted=1 and v.id=#{id}
+	</select>
+	<select id="getCodeByKey" resultMap="codeMap">
+		select 
+			<include refid="codeColumns"></include>,
+			<include refid="codeValueColumns"></include>
+		from sys_code c 
+		left join sys_code_value v on v.code_id = c.id and v.enabled = 1 and v.deleted = 1
+		where c.deleted=1 and c.key_word=#{keyWord}
+	</select>
+	<select id="getCodeCount" resultType="java.lang.Long">
+		select count(id) from sys_code where deleted=1
+	</select>
+	<select id="getCodeValueCount" resultType="java.lang.Long">
+		select count(id) from sys_code_value where deleted=1
+		<if test="codeId!=null  and codeId != ''">
+			and code_id = #{codeId}
+		</if>
+	</select>
+	<select id="getCodeValues" resultMap="codeValueMap">
+    	select 
+			<include refid="codeValueColumns" />
+		from sys_code_value v where v.deleted=1
+		<choose>
+			<when test="codeId != null and codeId != ''">
+				and v.code_id = #{codeId}
+			</when>
+			<otherwise>
+				<!-- 恒不等式，让其查询结果为0 -->
+				and 1=2
+			</otherwise>
+		</choose>
+		<if test="rows > 0">
+			limit #{start},#{rows}
+		</if>
+    </select>
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aofa.sifa.mapper.gemo.RptLocateSuccessDao">
+	<resultMap id="rptLocateSuccessMap" type="RptLocateSuccess">
+		<id column="id" jdbcType="VARCHAR" property="id" />
+		<result column="curr_code" jdbcType="VARCHAR" property="currCode" />
+		<result column="success_num" jdbcType="INTEGER" property="successNum" />
+		<result column="total_num" jdbcType="INTEGER" property="totalNum" />
+		<result column="post_date" jdbcType="TIMESTAMP" property="postDate" />		
+		<result column="gemo_percent" property="gemoPercent"></result>
+		<result column="office_id" property="officeId"></result>
+		<result column="office_name" property="officeName"></result>
+	</resultMap>
+	<sql id="locateSuccessColumns">
+		g.id, g.curr_code, g.success_num, g.total_num, g.post_date,office_id,g.office_name
+	</sql>
+	<sql id="locateSuccessColumns2">
+		id, curr_code, success_num, total_num, post_date,office_id,office_name
+	</sql>
+	<select id="getRptLocateSuccessById" resultMap="rptLocateSuccessMap">
+		select
+		<include refid="locateSuccessColumns"></include>
+		from rpt_locate_success g
+		left join sys_office v on v.code = g.curr_code
+		where g.id=#{id}
+	</select>
+	<select id="getRptLocateSuccessByCurrTime" resultMap="rptLocateSuccessMap">
+		select
+		<include refid="locateSuccessColumns"></include>
+		from rpt_locate_success g
+		where DATE_FORMAT(g.post_date,'%Y-%M-%D') =
+		DATE_FORMAT(#{postDate},'%Y-%M-%D')
+		<if test="officeId != null">
+			and g.office_id = #{officeId}
+		</if>
+		<if test="officeId == null or officeId == ''">
+			and g.office_id is null
+		</if>
+	</select>
+	<select id="getRptLocateSuccessForStatistic" resultMap="rptLocateSuccessMap">
+		select g.office_name,g.office_id,o.parent_id as officeParentId,g.id,sum(g.success_num) as success_num,sum(g.total_num) as
+		total_num <!--,concat(ROUND(sum(g.success_num)/sum(g.total_num)*100,2),'%') as gemo_percent -->
+		from rpt_locate_success g
+		left join sys_office o on o.id = g.office_id
+		where 1=1
+		<if test="admin == null or admin != 1">
+			<choose>
+				<when test="offices == null or offices.size() == 0">
+					and 1=2
+				</when>
+				<otherwise>
+					and g.office_id in
+					<foreach collection="offices" open="(" close=")" separator="," item="office">
+						#{office.id}
+					</foreach>
+				</otherwise>
+			</choose>
+		</if>
+		<choose>
+			<when test="startDate != null and endDate != null">
+				and g.post_date <![CDATA[>=]]> #{startDate} and g.post_date <![CDATA[<=]]> #{endDate}
+			</when>
+			<when test="startDate != null">
+				and g.post_date <![CDATA[>=]]> #{startDate}
+			</when>
+			<when test="endDate != null">
+				and g.post_date <![CDATA[<=]]> #{endDate}
+			</when>
+		</choose>
+		group by g.office_id
+	</select>
+	<select id="getCount" resultType="java.lang.Long">
+		select count(1)
+		from rpt_locate_success g
+		<choose>
+			<when test="startDate != null and endDate != null">
+				where g.post_date <![CDATA[>=]]> #{startDate} and g.post_date <![CDATA[<=]]> #{endDate}
+			</when>
+			<when test="startDate != null">
+				where g.post_date <![CDATA[>=]]> #{startDate}
+			</when>
+			<when test="endDate != null">
+				where g.post_date <![CDATA[<=]]> #{endDate}
+			</when>
+		</choose>
+		
+	</select>
+	<insert id="addRptLocateSuccess">
+		insert into rpt_locate_success (
+		<include refid="locateSuccessColumns2"></include>
+		)
+		values (#{id,jdbcType=VARCHAR}, #{currCode,jdbcType=VARCHAR},
+		#{successNum,jdbcType=INTEGER},
+		#{totalNum,jdbcType=INTEGER}, #{postDate,jdbcType=TIMESTAMP},
+		#{officeId},#{officeName})
+	</insert>
+	<update id="updateRptLocateSuccess">
+		update rpt_locate_success
+		set curr_code = #{currCode,jdbcType=VARCHAR},
+		success_num = #{successNum,jdbcType=INTEGER},
+		total_num = #{totalNum,jdbcType=INTEGER},
+		post_date = #{postDate,jdbcType=TIMESTAMP},
+		office_id = #{officeId},
+		office_name=#{officeName}
+		where id = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>
