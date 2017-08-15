@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.neoit.mapper.Edu_newsMapper" >
-  <resultMap id="BaseResultMap" type="com.neoit.entity.Edu_news" >
+<mapper namespace="com.neo.mapper.Edu_newsMapper" >
+  <resultMap id="BaseResultMap" type="com.neo.entity.Edu_news" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="author" property="author" jdbcType="VARCHAR" />
@@ -32,7 +32,7 @@
     delete from edu_news
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.neoit.entity.Edu_news" >
+  <insert id="insert" parameterType="com.neo.entity.Edu_news" >
     insert into edu_news (id, title, author, 
       create_time, type, level, 
       html_url, resume, create_id, 
@@ -46,7 +46,7 @@
       #{enabled,jdbcType=INTEGER}, #{images,jdbcType=VARCHAR}, #{titleImage,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.neoit.entity.Edu_news" >
+  <insert id="insertSelective" parameterType="com.neo.entity.Edu_news" >
     insert into edu_news
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -143,7 +143,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.neoit.entity.Edu_news" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.neo.entity.Edu_news" >
     update edu_news
     <set >
       <if test="title != null" >
@@ -191,7 +191,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.neoit.entity.Edu_news" >
+  <update id="updateByPrimaryKey" parameterType="com.neo.entity.Edu_news" >
     update edu_news
     set title = #{title,jdbcType=VARCHAR},
       author = #{author,jdbcType=VARCHAR},

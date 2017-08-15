@@ -1,26 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<!-- 别名 -->
-	<typeAliases>
-		<!-- 系统配置 -->
-		<typeAlias type="com.neo.sys.entity.BaseBean" alias="BaseBean"/>
-		<typeAlias type="com.neo.sys.entity.bean.Menu" alias="Menu"/>
-		<typeAlias type="com.neo.sys.entity.bean.MenuRole" alias="MenuRole"/>
-		<typeAlias type="com.neo.sys.entity.bean.Code" alias="Code"/>
-		<typeAlias type="com.neo.sys.entity.bean.SysFile" alias="SysFile"/>
-		<typeAlias type="com.neo.sys.entity.bean.CodeValue" alias="CodeValue"/>
-		<typeAlias type="com.neo.sys.entity.bean.Sequence" alias="Sequence"/>
+<!-- 引用jdbc.properties配置文件 -->
+<properties resource="jdbc.properties"/>
+<!-- 在控制台上打印出相应的sql语句 -->
+	<settings>
+		<setting name="logImpl" value="STDOUT_LOGGING"/>	
+	</settings>
+ 	<!-- <environments default="dataSource">
+        <environment id="dataSource">
+            <transactionManager type="JDBC"/>
+            <dataSource type="UNPOOLED"> 
+             UNPOOLED,未使用池   POOLED,使用JNDI 使用JNDI
+                <property name="driver" value="${jdbc_driver}"/>  
+                <property name="url" value="${jdbc_url}"/>
+                <property name="username" value="${jdbc_user}"/>  
+                <property name="password" value="${jdbc_password}"/>  
+            </dataSource>  
+        </environment>  
+    </environments>  -->
+    
+    <!-- mapper配置 -->
+	<mappers>
+		<mapper resource="com/neo/mapper/Edu_newsMapper.xml" />
+		<mapper resource="com/neo/mapper/Sys_userMapper.xml" />
 		
-		<!-- 业务配置 -->
-		<typeAlias type="com.neo.entity.Edu_news" alias="EduNews"/>
-		<typeAlias type="com.neo.entity.Sys_user" alias="User"/>
-		<typeAlias type="com.neo.entity.Sys_office" alias="Office"/>
-
-
-	</typeAliases>
-	
-	<plugins>
-		<plugin interceptor="com.neo.sys.utils.PageHelper"></plugin>
-	</plugins>
-</configuration>
+	</mappers>
+</configuration>	

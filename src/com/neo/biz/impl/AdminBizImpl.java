@@ -9,12 +9,14 @@ import com.neo.mapper.Edu_newsMapper;
 
 public class AdminBizImpl  implements  AdminBiz{
 	Edu_newsMapper newsMapper;
-	@Override
-	public int insert(Edu_news record) throws Exception {
-		// TODO Auto-generated method stub
-		return newsMapper.insert(record);
-	}
+	
 
+
+	@Override
+	public int insertSelective(Edu_news record) {
+		// TODO Auto-generated method stub
+		return newsMapper.insertSelective(record);
+	}
 	@Override
 	public int updateByPrimaryKeySelective(Edu_news record) throws Exception {
 		// TODO Auto-generated method stub
@@ -27,11 +29,12 @@ public class AdminBizImpl  implements  AdminBiz{
 		return newsMapper.deleteByPrimaryKey(id);
 	}
 
-//	@Override
-//	public List<Edu_news> findNewsByTypeAndLevel(Map<String, Object> map) {
-//		// TODO Auto-generated method stub
-//		return newsMapper.findNewsByTypeAndLevel(map);
-//	}
+	@Override
+	public List<Edu_news> findNewsByTypeAndLevel(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return newsMapper.findNewsByTypeAndLevel(map);
+	}
+
 	@Override
 	public Edu_news selectByPrimaryKey(Integer id) throws Exception {
 		// TODO Auto-generated method stub
@@ -45,12 +48,7 @@ public class AdminBizImpl  implements  AdminBiz{
 		this.newsMapper = newsMapper;
 	}
 
-	@Override
-	public List<Edu_news> findNewsByTypeAndLevel(Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	
 	
 	
